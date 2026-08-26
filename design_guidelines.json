@@ -1,0 +1,71 @@
+{
+  "project_name": "IT Tool Landing Page - Elite $10,000 SaaS",
+  "theme": "Dark Mode Professional Executive & High-Tech Ops Suite",
+  "archetype": "THE PERFORMANCE PRO / SWISS HIGH CONTRAST",
+  "typography": {
+    "headline_font": "Outfit, sans-serif",
+    "body_font": "Plus Jakarta Sans, sans-serif",
+    "weights": ["300", "400", "500", "600", "700", "800"],
+    "hierarchy_rules": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight font-extrabold",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl font-semibold",
+      "body": "text-base text-slate-300 font-normal leading-relaxed"
+    }
+  },
+  "colors": {
+    "background_primary": "#07090E",
+    "background_surface": "#0F141F",
+    "background_card": "#131C2E",
+    "border_subtle": "#1E293B",
+    "accent_glow": "#38BDF8",
+    "accent_primary": "#2563EB",
+    "text_main": "#F8FAFC",
+    "text_muted": "#94A3B8"
+  },
+  "visual_enhancers": {
+    "glassmorphism": "backdrop-blur-xl bg-slate-950/70 border border-slate-800/80 shadow-[0_8px_32px_rgba(0,0,0,0.5)]",
+    "tracing_beam": "relative before:absolute before:inset-0 before:p-[1px] before:rounded-2xl before:bg-gradient-to-r before:from-sky-500 before:via-indigo-500 before:to-transparent before:content-[''] before:-z-10",
+    "noise_texture": "subtle radial gradient glows with grid matrix overlay"
+  },
+  "tools_integrated": [
+    {
+      "id": "tool-1",
+      "name": "IT Incident Priority Calculator",
+      "gumroad_url": "https://meetulista.gumroad.com/l/it-incident-priority-calculator",
+      "category": "ITSM & Operations",
+      "description": "Calculate dynamic incident severity and priority rankings based on business impact and urgency matrices."
+    },
+    {
+      "id": "tool-2",
+      "name": "IT Leadership Salary Benchmarker",
+      "gumroad_url": "https://meetulista.gumroad.com/l/it-leadership-salary-benchmarker",
+      "category": "Compensation & Strategy",
+      "description": "Benchmark IT executive and engineering compensation against live market percentiles across regions and tiers."
+    },
+    {
+      "id": "tool-3",
+      "name": "IT Change Readiness Checker",
+      "gumroad_url": "https://meetulista.gumroad.com/l/it-change-readiness-checker",
+      "category": "Risk & Governance",
+      "description": "Assess deployment readiness, risk vectors, dependencies, and stakeholder sign-offs before production releases."
+    }
+  ],
+  "image_urls": [
+    {
+      "category": "hero_background",
+      "image_url": "https://images.unsplash.com/photo-1639066648921-82d4500abf1a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzN8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwc2VydmVyJTIwcm9vbSUyMG1pbmltYWwlMjBoaWdoJTIwdGVjaCUyMGRhcmslMjBibHVlfGVufDB8fHx8MTc4NzczNTQ0OXww&ixlib=rb-4.1.0&q=85",
+      "description": "High tech server room with blue illumination"
+    },
+    {
+      "category": "architecture_preview",
+      "image_url": "https://images.pexels.com/photos/7285011/pexels-photo-7285011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Monochrome modern architectural high rise"
+    }
+  ],
+  "accessibility": {
+    "apca_contrast_checked": true,
+    "interactive_focus_states": "ring-2 ring-sky-400 focus:outline-none"
+  },
+  "instructions_to_main_agent": "Implement a stunning, unified $10k-aesthetic single-page landing page featuring all 6 tools (3 requested + 3 core built-ins or extended toolkit) with interactive calculators, embedded background Gumroad action flow, smooth scroll navigation, and glassmorphism cards without any flat transparent overlays."
+}
