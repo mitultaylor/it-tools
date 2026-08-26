@@ -1,216 +1,163 @@
 import { useEffect, useRef } from "react";
 import "@/App.css";
-import Lenis from "lenis";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { Activity, ArrowUpRight, BarChart3, Briefcase, ClipboardCheck, Gauge, ShieldCheck } from "lucide-react";
 
 const tools = [
-  { id: "change-readiness", number: "01", name: "Change Readiness Checker", description: "Pressure-test a release before it becomes tomorrow's incident report.", icon: ShieldCheck, url: "https://meetulista.gumroad.com/l/it-change-readiness-checker" },
-  { id: "salary-benchmarker", number: "02", name: "IT Leadership Salary Benchmarker", description: "See the market clearly before the next offer, review, or board conversation.", icon: BarChart3, url: "https://meetulista.gumroad.com/l/it-leadership-salary-benchmarker" },
-  { id: "incident-priority", number: "03", name: "IT Incident Priority Calculator", description: "Turn noisy incident signals into a confident severity call in seconds.", icon: Gauge, url: "https://meetulista.gumroad.com/l/it-incident-priority-calculator" },
-  { id: "job-tracker", number: "04", name: "IT Leadership Job Search Tracker", description: "Track every Director and VP IT application across the US, India, and Dubai.", icon: Briefcase, url: "https://meetulista.gumroad.com/l/it-leadership-job-tracker" },
-  { id: "servicenow-health", number: "05", name: "ServiceNow Health Tool", description: "Score how your ServiceNow instance is actually running — maturity, governance, performance.", icon: Activity, url: "https://meetulista.gumroad.com/l/servicenow-itsm-health" },
-  { id: "cmdb-audit", number: "06", name: "CMDB Health Audit Tool", description: "Score your CMDB across completeness, correctness, and compliance before the next audit lands.", icon: ClipboardCheck, url: "https://meetulista.gumroad.com/l/cmdb-audit-tool" },
+  { id: "change-readiness", name: "Change Readiness Checker", icon: ShieldCheck, url: "https://meetulista.gumroad.com/l/it-change-readiness-checker" },
+  { id: "salary-benchmarker", name: "Salary Benchmarker", icon: BarChart3, url: "https://meetulista.gumroad.com/l/it-leadership-salary-benchmarker" },
+  { id: "incident-priority", name: "Incident Priority Calculator", icon: Gauge, url: "https://meetulista.gumroad.com/l/it-incident-priority-calculator" },
+  { id: "job-tracker", name: "Job Search Tracker", icon: Briefcase, url: "https://meetulista.gumroad.com/l/it-leadership-job-tracker" },
+  { id: "servicenow-health", name: "ServiceNow Health", icon: Activity, url: "https://meetulista.gumroad.com/l/servicenow-itsm-health" },
+  { id: "cmdb-audit", name: "CMDB Health Audit", icon: ClipboardCheck, url: "https://meetulista.gumroad.com/l/cmdb-audit-tool" },
 ];
 
-const ParticleField = () => {
+const RippleCanvas = () => {
   const ref = useRef(null);
   useEffect(() => {
     const canvas = ref.current;
     const ctx = canvas.getContext("2d");
-    let w = 0, h = 0, raf;
-    let pts = [];
-    const mouse = { x: -9999, y: -9999 };
+    const SCALE = 3;
+    let W = 0, H = 0, buf1, buf2, img, raf, rowTop, rowBot;
+    const TOP = [206, 227, 241];
+    const BOT = [166, 197, 222];
 
     const resize = () => {
-      const r = canvas.parentElement.getBoundingClientRect();
-      w = r.width; h = r.height;
-      canvas.width = w; canvas.height = h;
-      const n = Math.min(90, Math.floor((w * h) / 16000));
-      pts = Array.from({ length: n }, () => ({
-        x: Math.random() * w, y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 1.6 + 0.6,
-      }));
-    };
-
-    const onMove = (e) => {
-      const r = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-    };
-    const onLeave = () => { mouse.x = -9999; mouse.y = -9999; };
-
-    const tick = () => {
-      ctx.clearRect(0, 0, w, h);
-      for (const p of pts) {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-        const dx = p.x - mouse.x, dy = p.y - mouse.y;
-        const d = Math.hypot(dx, dy);
-        if (d < 130 && d > 0.01) { p.x += (dx / d) * 0.9; p.y += (dy / d) * 0.9; }
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0, 245, 255, 0.5)";
-        ctx.fill();
+      W = Math.ceil(window.innerWidth / SCALE);
+      H = Math.ceil(window.innerHeight / SCALE);
+      canvas.width = W; canvas.height = H;
+      buf1 = new Float32Array(W * H);
+      buf2 = new Float32Array(W * H);
+      img = ctx.createImageData(W, H);
+      rowTop = new Float32Array(H * 3);
+      rowBot = new Float32Array(H * 3);
+      for (let y = 0; y < H; y++) {
+        const t = y / H;
+        for (let c = 0; c < 3; c++) rowTop[y * 3 + c] = TOP[c] + (BOT[c] - TOP[c]) * t;
       }
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-          const d = Math.hypot(dx, dy);
-          if (d < 120) {
-            ctx.beginPath();
-            ctx.moveTo(pts[i].x, pts[i].y);
-            ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(0, 245, 255, ${0.14 * (1 - d / 120)})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
+    };
+
+    const drop = (x, y, s) => {
+      const bx = Math.floor(x / SCALE), by = Math.floor(y / SCALE);
+      for (let j = -2; j <= 2; j++) {
+        for (let i = -2; i <= 2; i++) {
+          const xi = bx + i, yj = by + j;
+          if (xi > 0 && xi < W - 1 && yj > 0 && yj < H - 1) buf1[yj * W + xi] += s;
         }
       }
-      raf = requestAnimationFrame(tick);
     };
 
-    resize(); tick();
+    const step = () => {
+      for (let y = 1; y < H - 1; y++) {
+        const row = y * W;
+        for (let x = 1; x < W - 1; x++) {
+          const i = row + x;
+          buf2[i] = ((buf1[i - 1] + buf1[i + 1] + buf1[i - W] + buf1[i + W]) * 0.5 - buf2[i]) * 0.982;
+        }
+      }
+      const t = buf1; buf1 = buf2; buf2 = t;
+      const d = img.data;
+      for (let y = 0; y < H; y++) {
+        const row = y * W, rb = y * 3;
+        for (let x = 0; x < W; x++) {
+          const i = row + x, p = i * 4;
+          const sh = buf1[i] * 0.9;
+          d[p] = Math.max(0, Math.min(255, rowTop[rb] + sh));
+          d[p + 1] = Math.max(0, Math.min(255, rowTop[rb + 1] + sh));
+          d[p + 2] = Math.max(0, Math.min(255, rowTop[rb + 2] + sh * 0.6));
+          d[p + 3] = 255;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+      raf = requestAnimationFrame(step);
+    };
+
+    let last = 0;
+    const onMove = (e) => {
+      const now = performance.now();
+      if (now - last > 28) { drop(e.clientX, e.clientY, 240); last = now; }
+    };
+    const ambient = setInterval(() => {
+      drop(Math.random() * window.innerWidth, Math.random() * window.innerHeight, 150);
+    }, 1500);
+
+    resize(); step();
     window.addEventListener("resize", resize);
-    canvas.parentElement.addEventListener("mousemove", onMove);
-    canvas.parentElement.addEventListener("mouseleave", onLeave);
+    window.addEventListener("mousemove", onMove);
     return () => {
       cancelAnimationFrame(raf);
+      clearInterval(ambient);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMove);
     };
   }, []);
-  return <canvas ref={ref} className="particles" aria-hidden="true" />;
-};
-
-const TiltCard = ({ tool, index }) => {
-  const ref = useRef(null);
-  const Icon = tool.icon;
-  const onMove = (e) => {
-    const r = ref.current.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    ref.current.style.setProperty("--rx", `${(-py * 9).toFixed(2)}deg`);
-    ref.current.style.setProperty("--ry", `${(px * 11).toFixed(2)}deg`);
-    ref.current.style.setProperty("--mx", `${((px + 0.5) * 100).toFixed(1)}%`);
-    ref.current.style.setProperty("--my", `${((py + 0.5) * 100).toFixed(1)}%`);
-  };
-  const onLeave = () => {
-    ref.current.style.setProperty("--rx", "0deg");
-    ref.current.style.setProperty("--ry", "0deg");
-  };
-  return (
-    <motion.div
-      className="card-shell"
-      initial={{ opacity: 0, y: 34 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <article
-        ref={ref}
-        className="card"
-        data-testid={`tool-card-${tool.id}`}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-      >
-        <div className="card-shine" aria-hidden="true" />
-        <div className="card-head">
-          <div className="card-icon"><Icon size={18} /></div>
-          <span className="card-price" data-testid={`price-${tool.id}`}>$29<em>one-time</em></span>
-        </div>
-        <div className="card-body">
-          <span className="card-num">{tool.number}</span>
-          <h3 className="card-title">{tool.name}</h3>
-          <p className="card-desc">{tool.description}</p>
-        </div>
-        <a
-          className="card-buy"
-          href={tool.url}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`Buy ${tool.name} on Gumroad`}
-          data-testid={`buy-${tool.id}`}
-        >
-          Get tool <ArrowUpRight size={14} />
-        </a>
-      </article>
-    </motion.div>
-  );
+  return <canvas ref={ref} className="ripple" aria-hidden="true" />;
 };
 
 const Home = () => {
-  const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 700], [0, 140]);
-  const heroOpacity = useTransform(scrollY, [0, 550], [1, 0]);
-  const headY = useTransform(scrollY, [300, 1100], [60, -30]);
-
   useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.95 });
-    let frame;
-    const raf = (time) => { lenis.raf(time); frame = requestAnimationFrame(raf); };
-    frame = requestAnimationFrame(raf);
-    document.querySelectorAll('a[href^="#"]').forEach((a) => {
-      a.addEventListener("click", (e) => {
-        const target = document.querySelector(a.getAttribute("href"));
-        if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -72 }); }
-      });
-    });
-    return () => { cancelAnimationFrame(frame); lenis.destroy(); };
+    const root = document.documentElement;
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf;
+    const onMove = (e) => {
+      tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    const loop = () => {
+      cx += (tx - cx) * 0.055;
+      cy += (ty - cy) * 0.055;
+      root.style.setProperty("--px", cx.toFixed(4));
+      root.style.setProperty("--py", cy.toFixed(4));
+      raf = requestAnimationFrame(loop);
+    };
+    window.addEventListener("mousemove", onMove);
+    loop();
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("mousemove", onMove); };
   }, []);
 
-  const fadeUp = (delay) => ({
-    initial: { opacity: 0, y: 34 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] },
-  });
-
   return (
-    <main className="site" data-testid="it-tool-landing-page">
-      <nav className="nav" data-testid="site-navigation">
-        <a href="#top" className="brand" data-testid="brand-link">IT TOOL <span>LAND</span></a>
-        <a href="#tools" className="nav-btn" data-testid="nav-view-toolkit">View Toolkit <ArrowUpRight size={14} /></a>
-      </nav>
+    <main className="stage" data-testid="it-tool-landing-page">
+      <RippleCanvas />
 
-      <section className="hero container" id="top" data-testid="hero-section">
-        <ParticleField />
-        <motion.div className="hero-inner" style={{ y: heroY, opacity: heroOpacity }}>
-          <motion.div className="overline float-a" data-testid="hero-overline" {...fadeUp(0)}>
-            Six browser tools · One calm workflow
-          </motion.div>
-          <motion.h1 className="hero-title" data-testid="hero-heading" {...fadeUp(0.12)}>
-            Decide faster.<br />
-            <span className="cyan-line">Ship safer.</span>
-          </motion.h1>
-          <motion.p className="hero-lede" data-testid="hero-description" {...fadeUp(0.24)}>
-            Precision instruments for IT leaders — audit your CMDB, score your ServiceNow instance,
-            price your next role, and call every incident with confidence.
-          </motion.p>
-          <motion.div className="hero-trust" data-testid="hero-trust" {...fadeUp(0.36)}>
-            <span className="float-b">Built on 12 years of IT operations</span>
-            <span className="float-c">No login</span>
-            <span className="float-a">Instant delivery</span>
-          </motion.div>
-        </motion.div>
-        <div className="orb orb-a float-b" aria-hidden="true" />
-        <div className="orb orb-b float-c" aria-hidden="true" />
-      </section>
+      <header className="topbar" data-testid="site-navigation">
+        <span className="brand" data-testid="brand-link">IT TOOL LAND</span>
+        <span className="topbar-meta">$29 each · Instant delivery</span>
+      </header>
 
-      <section className="toolkit container" id="tools" data-testid="toolkit-section">
-        <motion.div className="toolkit-head" style={{ y: headY }}>
-          <div className="overline">The toolkit / 01—06</div>
-          <h2 data-testid="toolkit-heading">Every tool earns its place.</h2>
-        </motion.div>
-        <div className="grid">
-          {tools.map((tool, i) => <TiltCard tool={tool} index={i} key={tool.id} />)}
-        </div>
-      </section>
+      <div className="headline" data-testid="hero-section">
+        <div className="overline" data-testid="hero-overline">Built on 12 years of IT operations</div>
+        <h1 className="hero-title" data-testid="hero-heading">
+          <span className="accent">Six</span> tools.<br />Zero noise.
+        </h1>
+      </div>
 
-      <footer className="footer container" data-testid="site-footer">
-        <span className="footer-brand">IT TOOL LAND</span>
-        <span>Tools for the people behind the systems.</span>
+      <div className="cards" data-testid="toolkit-section">
+        {tools.map((tool, i) => {
+          const Icon = tool.icon;
+          return (
+            <div className={`par par-${i + 1}`} style={{ "--d": `${16 + (i % 3) * 9}px` }} key={tool.id}>
+              <div className={`float f-${(i % 3) + 1}`}>
+                <div className="pcard" data-testid={`tool-card-${tool.id}`}>
+                  <div className="pcard-icon"><Icon size={17} strokeWidth={2.2} /></div>
+                  <span className="pcard-name">{tool.name}</span>
+                  <a
+                    className="pcard-buy"
+                    href={tool.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Buy ${tool.name} on Gumroad`}
+                    data-testid={`buy-${tool.id}`}
+                  >
+                    $29 <ArrowUpRight size={13} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <footer className="foot" data-testid="site-footer">
         <span>© 2026 Meet Ulista</span>
+        <span>No login · Nothing stored</span>
       </footer>
     </main>
   );

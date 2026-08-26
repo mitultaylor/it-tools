@@ -30,7 +30,8 @@ Single premium "IT TOOL LANDING PAGE" integrating 6 Gumroad tools (3 existing + 
 6. IT Change Readiness Checker — gumroad.com/l/it-change-readiness-checker
 
 ## Implemented (2026-08-26)
-- v4 rebuild (latest): interactive duotone — navy #0A0F2C + electric cyan #00F5FF. Canvas particle mesh (drifting nodes + connective lines, mouse-repulsion) behind hero, staggered fade-in hero copy with scroll parallax (hero drifts/fades on scroll), floating orbs + floating trust badges, 3D tilt tool cards (pointer-tracked rotateX/rotateY via CSS vars + cursor-following cyan shine), cyan glow hovers on cards and buttons, parallax on toolkit heading. Lenis smooth scroll retained.
+- v5 rebuild (latest): single-screen portfolio-style design — light sky-blue (#B8D4E8 gradient) with a real-time water-ripple canvas (dual-buffer fluid sim reacting to mouse + ambient drops), oversized black Anton headline with one orange accent word (#FF4D00), six glossy pill cards scattered around the viewport with float animations, soft shadows, hover lift, and per-card mouse parallax (lerped CSS vars). No page scroll on desktop; stacked scrollable fallback on mobile. Buy buttons are black pills opening Gumroad in a new tab.
+- v4 (superseded): interactive navy/cyan particle design.
 - v3 (superseded): static duotone navy/cyan.
 - Nav has exactly ONE button ("View Toolkit"). Cards show $29 one-time; buy buttons are plain anchors opening the Gumroad product in a NEW TAB (target="_blank") — no overlay script, no custom cart. gumroad.js removed from index.html.
 - Verified: 6 cards with correct links, 1 nav button, click opened gumroad.com/l/cmdb-audit-tool in a new tab.
