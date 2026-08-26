@@ -30,12 +30,13 @@ Single premium "IT TOOL LANDING PAGE" integrating 6 Gumroad tools (3 existing + 
 6. IT Change Readiness Checker — gumroad.com/l/it-change-readiness-checker
 
 ## Implemented (2026-08-26)
-- Full redesign: monochrome executive theme (pure black, white accents, zinc greys); glass retained only on the sticky nav.
-- Removed method/about/stats filler sections and duplicate CTAs.
-- Fixed Gumroad checkout: replaced broken iframe modal with official gumroad.js overlay; verified Get it → overlay → Add to cart → checkout page (US$29, card/Klarna/Cash App).
+- v2 rebuild (latest): agency-portfolio-grade design on a deep obsidian base (#07070A, no pure black) with film-grain texture, Bricolage Grotesque + Manrope typography, left-aligned cinematic hero with scroll indicator.
+- Glassmorphism on the 6 tool cards only (backdrop-blur, hairline borders, inner highlight); each card has its own jewel accent (amber, jade, crimson, amethyst, azure, chartreuse) driving its glow, icon chip, kicker, and CTA pill — distinct but one system.
+- Cards show $29 one-time pricing; tools listed in user's order (Change Readiness, Salary Benchmarker, Incident Priority, Job Tracker, ServiceNow Health, CMDB Audit).
+- v1 (superseded): monochrome black/white theme — replaced at user's request.
+- Fixed Gumroad checkout: replaced broken iframe modal with official gumroad.js overlay; verified Get tool → overlay → Add to cart → gumroad.com/checkout (US$29, card/Klarna/Cash App).
 - Integrated all 6 real Gumroad URLs (3 recovered from user's original uploaded HTML, 3 new).
 - Lenis smooth momentum scrolling + framer-motion staggered card reveals.
-- Verified: desktop render, 6 cards, overlay opens, add-to-cart → checkout works.
 
 ## Backlog
 - P0: none.
