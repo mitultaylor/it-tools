@@ -1,71 +1,85 @@
 {
-  "project_name": "IT Tool Landing Page - Elite $10,000 SaaS",
-  "theme": "Dark Mode Professional Executive & High-Tech Ops Suite",
-  "archetype": "THE PERFORMANCE PRO / SWISS HIGH CONTRAST",
+  "theme_decision": "Dark Theme (Executive Minimalist / Vercel style) - Ultra Premium. Replaces the old green/peach color scheme with deep obsidian, stark white, and subtle silver micro-gradients to achieve a $10,000 look.",
   "typography": {
-    "headline_font": "Outfit, sans-serif",
-    "body_font": "Plus Jakarta Sans, sans-serif",
-    "weights": ["300", "400", "500", "600", "700", "800"],
-    "hierarchy_rules": {
-      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tight font-extrabold",
-      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-bold",
-      "h3": "text-xl sm:text-2xl font-semibold",
-      "body": "text-base text-slate-300 font-normal leading-relaxed"
+    "headings": {
+      "font": "Outfit",
+      "import_url": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap",
+      "strategy": "Tracking-tight, crisp, for a modern aesthetic.",
+      "sizes": {
+        "h1": "text-5xl sm:text-6xl font-medium tracking-tight",
+        "h2": "text-3xl sm:text-4xl font-medium tracking-tight"
+      }
+    },
+    "body": {
+      "font": "Inter",
+      "import_url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap",
+      "strategy": "High legibility, leading-relaxed for body copy, tight leading for stats/labels."
     }
   },
   "colors": {
-    "background_primary": "#07090E",
-    "background_surface": "#0F141F",
-    "background_card": "#131C2E",
-    "border_subtle": "#1E293B",
-    "accent_glow": "#38BDF8",
-    "accent_primary": "#2563EB",
-    "text_main": "#F8FAFC",
-    "text_muted": "#94A3B8"
+    "background": {
+      "base": "#000000",
+      "surface": "#0a0a0a",
+      "surface_elevated": "#111111"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "tertiary": "#71717A"
+    },
+    "borders": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "hover": "rgba(255, 255, 255, 0.2)"
+    },
+    "accent": {
+      "primary": "#FFFFFF",
+      "primary_foreground": "#000000"
+    }
   },
   "visual_enhancers": {
-    "glassmorphism": "backdrop-blur-xl bg-slate-950/70 border border-slate-800/80 shadow-[0_8px_32px_rgba(0,0,0,0.5)]",
-    "tracing_beam": "relative before:absolute before:inset-0 before:p-[1px] before:rounded-2xl before:bg-gradient-to-r before:from-sky-500 before:via-indigo-500 before:to-transparent before:content-[''] before:-z-10",
-    "noise_texture": "subtle radial gradient glows with grid matrix overlay"
+    "glass_effect": "Used ONLY on the sticky top navigation to maintain premium feel. Backdrop-blur-xl with bg-black/60 and 1px border-b border-white/10. Cards will NOT use heavy glass, but rather solid dark surfaces with subtle 1px borders (Bento style).",
+    "glow_effects": "Subtle radial gradients (using Tailwind radial-gradient utilities) behind the hero text and under the grid to create depth without looking cheap.",
+    "bento_grid": "The 6 tools must be placed in a responsive Bento Grid (grid-cols-1 md:grid-cols-2 lg:grid-cols-3) with tight gaps (gap-6). Each card must have sharp 12px radii with 1px border-white/10.",
+    "smooth_scrolling": "Lenis must be implemented for butter-smooth momentum scrolling."
   },
-  "tools_integrated": [
-    {
-      "id": "tool-1",
-      "name": "IT Incident Priority Calculator",
-      "gumroad_url": "https://meetulista.gumroad.com/l/it-incident-priority-calculator",
-      "category": "ITSM & Operations",
-      "description": "Calculate dynamic incident severity and priority rankings based on business impact and urgency matrices."
+  "components": {
+    "tool_card": {
+      "description": "Each tool card is a sleek dark surface (bg-[#0a0a0a]) with a 1px border. On hover, the border slightly brightens and a subtle inner shadow or gradient mask reveals itself.",
+      "structure": "Icon at top left, Tool Title, Short Description, Price ($29), and a 'Get it' button opening Gumroad."
     },
-    {
-      "id": "tool-2",
-      "name": "IT Leadership Salary Benchmarker",
-      "gumroad_url": "https://meetulista.gumroad.com/l/it-leadership-salary-benchmarker",
-      "category": "Compensation & Strategy",
-      "description": "Benchmark IT executive and engineering compensation against live market percentiles across regions and tiers."
-    },
-    {
-      "id": "tool-3",
-      "name": "IT Change Readiness Checker",
-      "gumroad_url": "https://meetulista.gumroad.com/l/it-change-readiness-checker",
-      "category": "Risk & Governance",
-      "description": "Assess deployment readiness, risk vectors, dependencies, and stakeholder sign-offs before production releases."
+    "buttons": {
+      "primary": "bg-white text-black font-medium px-6 py-2 rounded-full hover:bg-gray-200 transition-colors duration-200"
     }
-  ],
-  "image_urls": [
-    {
-      "category": "hero_background",
-      "image_url": "https://images.unsplash.com/photo-1639066648921-82d4500abf1a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzN8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwc2VydmVyJTIwcm9vbSUyMG1pbmltYWwlMjBoaWdoJTIwdGVjaCUyMGRhcmslMjBibHVlfGVufDB8fHx8MTc4NzczNTQ0OXww&ixlib=rb-4.1.0&q=85",
-      "description": "High tech server room with blue illumination"
-    },
-    {
-      "category": "architecture_preview",
-      "image_url": "https://images.pexels.com/photos/7285011/pexels-photo-7285011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-      "description": "Monochrome modern architectural high rise"
-    }
-  ],
-  "accessibility": {
-    "apca_contrast_checked": true,
-    "interactive_focus_states": "ring-2 ring-sky-400 focus:outline-none"
   },
-  "instructions_to_main_agent": "Implement a stunning, unified $10k-aesthetic single-page landing page featuring all 6 tools (3 requested + 3 core built-ins or extended toolkit) with interactive calculators, embedded background Gumroad action flow, smooth scroll navigation, and glassmorphism cards without any flat transparent overlays."
+  "layouts": {
+    "page_structure": "Single-page application. Fixed glass nav, Hero section with author trust signal, Toolkit Section (Bento Grid of 6 items), Minimal Footer. All fitting tightly to eliminate filler.",
+    "spacing": "Generous padding around the hero (py-32), tighter density inside the bento grid (p-8 per card)."
+  },
+  "motion": {
+    "interactions": "Micro-interactions on cards: hover translates Y by -2px, increases border opacity. Button hover states. Staggered fade-in (framer-motion) for the 6 grid items."
+  },
+  "media": {
+    "images": [
+      {
+        "url": "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBtYW4lMjBwb3J0cmFpdCUyMHRlY2h8ZW58MHx8fHwxNzg3NzM3ODM1fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Portrait for 'Meet Ulista' to establish trust in the Hero section.",
+        "category": "hero_trust"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Install and setup @studio-freight/react-lenis (or lenis via typical React wrappers) for smooth scrolling.",
+    "Ensure all Gumroad links are anchor tags with appropriate target or script bindings as per standard Gumroad overlay integration.",
+    "Build the 6 cards using a CSS Grid (Bento style). Maintain strict 1px borders and high contrast.",
+    "Do NOT use any green, peach, or light blue pastels. Stick rigidly to the Black/White/Grey token system.",
+    "Add 'data-testid' to all interactive elements."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic outputs. Make creative, distinctive frontends that surprise and delight.",
+    "Create depth through layered design elements with z-index hierarchy and subtle micro-gradients.",
+    "NEVER use universal transition like 'transition: all'. Apply to specific properties.",
+    "DO NOT center align the app container in App.css.",
+    "Include hover states and micro-interactions for all clickable elements.",
+    "Use Phosphor icons or Lucide icons for the 6 tools to keep them minimal and sharp."
+  ]
 }
