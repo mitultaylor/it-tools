@@ -30,7 +30,8 @@ Single premium "IT TOOL LANDING PAGE" integrating 6 Gumroad tools (3 existing + 
 6. IT Change Readiness Checker — gumroad.com/l/it-change-readiness-checker
 
 ## Implemented (2026-08-26)
-- v3 rebuild (latest): strict DUOTONE system — deep navy #0A0F2C base + electric cyan #00F5FF accent only (all text/borders/glows are tints of these two). Syne headings + DM Sans body, film-grain overlay, left-aligned hero with trust badges, glassmorphism ONLY on the 6 tool cards.
+- v4 rebuild (latest): interactive duotone — navy #0A0F2C + electric cyan #00F5FF. Canvas particle mesh (drifting nodes + connective lines, mouse-repulsion) behind hero, staggered fade-in hero copy with scroll parallax (hero drifts/fades on scroll), floating orbs + floating trust badges, 3D tilt tool cards (pointer-tracked rotateX/rotateY via CSS vars + cursor-following cyan shine), cyan glow hovers on cards and buttons, parallax on toolkit heading. Lenis smooth scroll retained.
+- v3 (superseded): static duotone navy/cyan.
 - Nav has exactly ONE button ("View Toolkit"). Cards show $29 one-time; buy buttons are plain anchors opening the Gumroad product in a NEW TAB (target="_blank") — no overlay script, no custom cart. gumroad.js removed from index.html.
 - Verified: 6 cards with correct links, 1 nav button, click opened gumroad.com/l/cmdb-audit-tool in a new tab.
 - v2 (superseded): obsidian monochrome + 6 jewel accents with gumroad.js overlay.
