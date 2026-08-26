@@ -31,6 +31,7 @@ Single premium "IT TOOL LANDING PAGE" integrating 6 Gumroad tools (3 existing + 
 
 ## Implemented (2026-08-26)
 - v5 rebuild (latest): single-screen portfolio-style design — light sky-blue (#B8D4E8 gradient) with a real-time water-ripple canvas (dual-buffer fluid sim reacting to mouse + ambient drops), oversized black Anton headline with one orange accent word (#FF4D00), six glossy pill cards scattered around the viewport with float animations, soft shadows, hover lift, and per-card mouse parallax (lerped CSS vars). No page scroll on desktop; stacked scrollable fallback on mobile. Buy buttons are black pills opening Gumroad in a new tab.
+- v5 standalone export: `/app/index.html` — fully self-contained vanilla HTML/CSS/JS port of v5 (no React/build; only Google Fonts CDN). Inline SVG icons, same ripple sim + parallax in vanilla JS. Verified: 6 cards, no scroll, buy buttons open correct Gumroad tabs. Works opened directly in a browser.
 - v4 (superseded): interactive navy/cyan particle design.
 - v3 (superseded): static duotone navy/cyan.
 - Nav has exactly ONE button ("View Toolkit"). Cards show $29 one-time; buy buttons are plain anchors opening the Gumroad product in a NEW TAB (target="_blank") — no overlay script, no custom cart. gumroad.js removed from index.html.
