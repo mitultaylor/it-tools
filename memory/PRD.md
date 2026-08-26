@@ -30,12 +30,11 @@ Single premium "IT TOOL LANDING PAGE" integrating 6 Gumroad tools (3 existing + 
 6. IT Change Readiness Checker — gumroad.com/l/it-change-readiness-checker
 
 ## Implemented (2026-08-26)
-- v2 rebuild (latest): agency-portfolio-grade design on a deep obsidian base (#07070A, no pure black) with film-grain texture, Bricolage Grotesque + Manrope typography, left-aligned cinematic hero with scroll indicator.
-- Glassmorphism on the 6 tool cards only (backdrop-blur, hairline borders, inner highlight); each card has its own jewel accent (amber, jade, crimson, amethyst, azure, chartreuse) driving its glow, icon chip, kicker, and CTA pill — distinct but one system.
-- Cards show $29 one-time pricing; tools listed in user's order (Change Readiness, Salary Benchmarker, Incident Priority, Job Tracker, ServiceNow Health, CMDB Audit).
-- v1 (superseded): monochrome black/white theme — replaced at user's request.
-- Fixed Gumroad checkout: replaced broken iframe modal with official gumroad.js overlay; verified Get tool → overlay → Add to cart → gumroad.com/checkout (US$29, card/Klarna/Cash App).
-- Integrated all 6 real Gumroad URLs (3 recovered from user's original uploaded HTML, 3 new).
+- v3 rebuild (latest): strict DUOTONE system — deep navy #0A0F2C base + electric cyan #00F5FF accent only (all text/borders/glows are tints of these two). Syne headings + DM Sans body, film-grain overlay, left-aligned hero with trust badges, glassmorphism ONLY on the 6 tool cards.
+- Nav has exactly ONE button ("View Toolkit"). Cards show $29 one-time; buy buttons are plain anchors opening the Gumroad product in a NEW TAB (target="_blank") — no overlay script, no custom cart. gumroad.js removed from index.html.
+- Verified: 6 cards with correct links, 1 nav button, click opened gumroad.com/l/cmdb-audit-tool in a new tab.
+- v2 (superseded): obsidian monochrome + 6 jewel accents with gumroad.js overlay.
+- v1 (superseded): monochrome black/white theme.
 - Lenis smooth momentum scrolling + framer-motion staggered card reveals.
 
 ## Backlog

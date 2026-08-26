@@ -1,108 +1,120 @@
 {
   "theme": "dark",
-  "typography": {
-    "google_fonts_url": "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Manrope:wght@300;400;500;600&display=swap",
-    "headings": {
-      "family": "'Bricolage Grotesque', sans-serif",
-      "weights": ["300", "500", "700"],
-      "usage": "Use Bricolage Grotesque for all H1-H4 headings. Keep letter-spacing tight (tracking-tight) to enhance the premium, structural agency feel. Never center-align hero headings; prefer left-alignment for a bold editorial look."
-    },
-    "body": {
-      "family": "'Manrope', sans-serif",
-      "weights": ["300", "400", "500", "600"],
-      "usage": "Use Manrope for all body copy, descriptions, and metadata. Use loose line-height (leading-relaxed) for readability."
-    },
-    "scale": {
-      "h1": "text-5xl sm:text-6xl tracking-tighter leading-none font-medium",
-      "h2": "text-3xl sm:text-4xl tracking-tight leading-tight font-medium",
-      "h3": "text-xl sm:text-2xl tracking-tight font-medium",
-      "body": "text-base leading-relaxed text-slate-300",
-      "small": "text-sm tracking-wide text-slate-400 uppercase",
-      "overline": "text-xs tracking-[0.2em] font-semibold uppercase"
-    }
-  },
   "colors": {
     "background": {
-      "main": "#07070A",
-      "surface": "#0C0D14",
-      "description": "A deep obsidian/midnight tone. NOT pure black (#000000). Use subtle radial gradient spotlights to create depth behind the glass cards."
+      "base": "#0A0F2C",
+      "surface": "rgba(10, 15, 44, 0.4)",
+      "nav": "rgba(10, 15, 44, 0.95)"
+    },
+    "accent": {
+      "cyan": "#00F5FF",
+      "cyanGlow": "rgba(0, 245, 255, 0.5)",
+      "cyanSubtle": "rgba(0, 245, 255, 0.1)"
     },
     "text": {
-      "primary": "#F8F9FA",
-      "secondary": "#A1A1AA",
-      "muted": "#52525B"
+      "primary": "#E5FBFF",
+      "secondary": "rgba(229, 251, 255, 0.7)",
+      "cyan": "#00F5FF",
+      "inverse": "#0A0F2C"
     },
-    "tool_accents": {
-      "change_readiness": {
-        "name": "Amber Spark",
-        "hex": "#F59E0B",
-        "bg_glow": "rgba(245, 158, 11, 0.15)"
-      },
-      "salary_benchmarker": {
-        "name": "Jade Premium",
-        "hex": "#10B981",
-        "bg_glow": "rgba(16, 185, 129, 0.15)"
-      },
-      "incident_priority": {
-        "name": "Crimson Alert",
-        "hex": "#F43F5E",
-        "bg_glow": "rgba(244, 63, 94, 0.15)"
-      },
-      "job_search": {
-        "name": "Amethyst Deep",
-        "hex": "#8B5CF6",
-        "bg_glow": "rgba(139, 92, 246, 0.15)"
-      },
-      "servicenow_health": {
-        "name": "Azure Tech",
-        "hex": "#06B6D4",
-        "bg_glow": "rgba(6, 182, 212, 0.15)"
-      },
-      "cmdb_audit": {
-        "name": "Chartreuse Logic",
-        "hex": "#84CC16",
-        "bg_glow": "rgba(132, 204, 22, 0.15)"
-      }
+    "border": {
+      "default": "rgba(0, 245, 255, 0.15)",
+      "hover": "rgba(0, 245, 255, 0.4)",
+      "active": "#00F5FF"
     }
   },
-  "page_background_treatment": {
-    "style": "Cinematic Depth",
-    "css": "background-color: #07070A; background-image: radial-gradient(circle at 15% 50%, rgba(255,255,255,0.03), transparent 25%), radial-gradient(circle at 85% 30%, rgba(255,255,255,0.02), transparent 25%);",
-    "instructions": "Create a deep, moody environment. Add a noise/grain texture overlay (opacity 2-3%) across the entire page to kill the digital flatness and give it a premium studio feel."
+  "typography": {
+    "fonts": {
+      "heading": "'Syne', sans-serif",
+      "body": "'DM Sans', sans-serif"
+    },
+    "sizes": {
+      "h1": "text-5xl md:text-7xl font-extrabold tracking-tighter leading-none text-[#E5FBFF]",
+      "h2": "text-3xl md:text-4xl font-bold tracking-tight text-[#E5FBFF]",
+      "h3": "text-xl md:text-2xl font-bold tracking-tight text-[#E5FBFF]",
+      "body": "text-base md:text-lg leading-relaxed text-[rgba(229,251,255,0.7)]",
+      "overline": "text-xs md:text-sm font-bold tracking-[0.2em] uppercase text-[#00F5FF]"
+    }
   },
-  "glassmorphism_recipe": {
-    "cards_only": true,
-    "container_classes": "relative overflow-hidden rounded-2xl bg-white/[0.02] backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transition-all duration-300",
-    "inner_glow": "inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)",
-    "hover_state": "hover:bg-white/[0.04] hover:border-white/[0.12] hover:-translate-y-1 hover:shadow-[0_16px_48px_0_rgba(0,0,0,0.4)]",
-    "accent_integration": "Each card should feature a subtle radial gradient blob in the background of the card (e.g., top right corner) using its specific tool_accent color. This creates distinctiveness while maintaining the cohesive glass system."
-  },
-  "layout_composition": {
-    "nav": "Minimal. Fixed to top, z-50. Glassmorphism enabled (bg-black/40 backdrop-blur-md border-b border-white/5). Left: 'IT Tools by [Name/Brand]'. Right: Anchor link to '#tools'.",
-    "hero": "Massive left-aligned typography. Include a clear value proposition: 'Built on 12 years of IT operations experience.' Add an optical 'scroll down' indicator. Use wide padding (py-32).",
-    "toolkit_grid": "Grid layout. grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8. Padding py-24. Each card must be a direct child. Give the grid generous spacing to let the glass breathe.",
-    "footer": "Minimal. py-16 border-t border-white/10. Copyright and a subtle sign-off. Monochrome text."
+  "layouts": {
+    "hero": "Left-aligned, agency-grade composition. Use substantial spacing (py-32). Include trust markers: 'Built on 12 years of IT operations. No login. Instant delivery.'",
+    "tools_grid": "Bento-style or strict 2/3 column grid (grid-cols-1 md:grid-cols-2 lg:grid-cols-3) with gap-8. py-24. Maximum negative space.",
+    "spacing": "Generous padding: p-4, p-8, p-12. Large gaps between sections."
   },
   "components": {
+    "navigation": {
+      "style": "fixed top-0 left-0 right-0 z-50 bg-[#0A0F2C]/95 border-b border-[rgba(0,245,255,0.1)] py-5 px-6 md:px-12 flex justify-between items-center. DO NOT use transparent nav.",
+      "button": "Only ONE CTA button in nav, e.g., 'View Toolkit'. Navigates to the tools section. No duplicates."
+    },
     "tool_card": {
-      "structure": "1. Overline (Accent color, Tool Category), 2. Title (H3), 3. Description (Manrope, 2-3 lines), 4. Price Tag ($29), 5. 'Get Tool' Button.",
-      "button_style": "Pill-shaped or rounded-lg. Solid background matching the tool's accent color (with hover state tightening opacity or brightness). Ensure text on the button is accessible (dark text on bright accents, light text on dark accents).",
-      "gumroad_integration": "Wrap the buy button or card entirely in an <a> tag pointing to the Gumroad URL. Ensure it has the class 'gumroad-button' if required by the already loaded script, or just standard href.",
-      "testid": "data-testid='tool-card-{tool-name}'"
+      "style": "Glassmorphism ONLY here. bg-[#0A0F2C]/30 backdrop-blur-xl border border-[rgba(0,245,255,0.15)] rounded-2xl p-8 relative flex flex-col justify-between h-full transition-all duration-300",
+      "hover": "hover:-translate-y-2 hover:border-[rgba(0,245,255,0.5)] hover:shadow-[0_8px_32px_rgba(0,245,255,0.15)] hover:bg-[#0A0F2C]/50",
+      "content": "Price tag ($29 One-Time) absolutely positioned or right-aligned top. Title and description left-aligned. 'Get Tool' button at bottom. Each card distinct via typography sizing and spacing.",
+      "button": "Plain anchor tags linking to Gumroad URL, target='_blank' rel='noreferrer'. Styled as primary button. No custom cart logic."
+    },
+    "buttons": {
+      "primary": "bg-[#00F5FF] text-[#0A0F2C] font-bold py-3 px-6 rounded-full hover:bg-[#E5FBFF] hover:shadow-[0_0_20px_rgba(0,245,255,0.4)] transition-all duration-300 w-full md:w-auto text-center flex items-center justify-center gap-2",
+      "secondary": "bg-transparent text-[#00F5FF] border border-[#00F5FF] font-bold py-3 px-6 rounded-full hover:bg-[rgba(0,245,255,0.1)] transition-all duration-300"
     }
   },
-  "micro_interactions": {
-    "cards": "Smooth transform translateY on hover. Subtle increase in border opacity.",
-    "buttons": "Scale up slightly (scale-105) on hover or press.",
-    "scroll": "Lenis smooth scroll is already installed. Ensure anchor links smoothly glide to the sections."
+  "motion": {
+    "scroll": "Lenis smooth scroll enabled at the root app level.",
+    "entrance": "Framer Motion staggered fade-up (y: 20 -> y: 0) for hero elements and cards. Keep animations elegant and quick.",
+    "interactions": "Hover states on cards (lift, glow, border opacity) and buttons."
   },
-  "general_ui_ux_guidelines": [
-    "No pure #000 backgrounds. Use the rich tinted dark theme.",
-    "Do not use transparent headers without blur.",
-    "Ensure all interactive elements have data-testid attributes.",
-    "Avoid centering large paragraphs of text.",
-    "Respect contrast ratios, especially text over the glass cards. If text is hard to read, darken the background behind it slightly.",
-    "Use framer-motion for simple staggered entrance animations when the grid scrolls into view."
+  "tools_data": [
+    {
+      "title": "Change Readiness Checker",
+      "description": "Evaluate and score your organization's readiness for IT changes instantly.",
+      "price": "$29",
+      "url": "https://meetulista.gumroad.com/l/it-change-readiness-checker"
+    },
+    {
+      "title": "IT Leadership Salary Benchmarker",
+      "description": "Benchmark your IT leadership compensation against industry standards.",
+      "price": "$29",
+      "url": "https://meetulista.gumroad.com/l/it-leadership-salary-benchmarker"
+    },
+    {
+      "title": "IT Incident Priority Calculator",
+      "description": "Standardize incident prioritization with an objective matrix.",
+      "price": "$29",
+      "url": "https://meetulista.gumroad.com/l/it-incident-priority-calculator"
+    },
+    {
+      "title": "IT Leadership Job Search Tracker",
+      "description": "Track your IT leadership job applications and interview progress.",
+      "price": "$29",
+      "url": "https://meetulista.gumroad.com/l/it-leadership-job-tracker"
+    },
+    {
+      "title": "ServiceNow Health Tool",
+      "description": "Assess the health and maturity of your ServiceNow ITSM implementation.",
+      "price": "$29",
+      "url": "https://meetulista.gumroad.com/l/servicenow-itsm-health"
+    },
+    {
+      "title": "CMDB Health Audit Tool",
+      "description": "Audit and improve the accuracy of your Configuration Management Database.",
+      "price": "$29",
+      "url": "https://meetulista.gumroad.com/l/cmdb-audit-tool"
+    }
   ],
-  "instructions_to_main_agent": "Use purely React/Tailwind/Framer Motion. Since it's a landing page without complex state, avoid heavy Shadcn components for layout. Build the tool cards using the glassmorphism recipe. Make sure each of the 6 tools uses its designated accent color for the inner glow/border highlight and CTA button to make it distinct. The Gumroad script is already in index.html, so you only need to use standard <a> tags with the Gumroad href."
+  "accessibility": {
+    "contrast": "Strict adherence to #E5FBFF and #00F5FF on #0A0F2C to maintain AA/AAA contrast.",
+    "aria": "Include aria-labels for all links and tools. Use semantic HTML (main, section, header, nav, footer)."
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "No generic centered layouts; prioritize left-aligned, asymmetrical tension.",
+    "STRICT TWO-COLOR RULE: Only use #0A0F2C (Navy base) and #00F5FF (Cyan accent). All other colors, texts, and borders must be opacities or tints of these two.",
+    "Ensure glassmorphism is ONLY used on the tool cards, not the nav or hero.",
+    "Gumroad links must be simple anchors opening in a new tab. Remove custom cart scripts if any.",
+    "Add data-testid attributes to all interactive elements.",
+    "Do NOT use transparent backgrounds in headers. Ensure nav has a solid or heavily blurred background.",
+    "Include 'Built on 12 years of IT operations', 'No login', 'Instant delivery' as trust badges in the hero."
+  ],
+  "visual_enhancers": {
+    "textures": "Consider a subtle 2-3% noise overlay on the body to remove digital flatness, keeping it premium.",
+    "background_glow": "Subtle, low-opacity (5%) cyan blurred ellipses behind the cards grid to add depth without breaking the duotone constraint."
+  }
 }
