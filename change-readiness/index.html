@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Change Readiness Checker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f4f6f9;color:#1a1a2e;min-height:100vh;padding:32px 16px}
+.container{max-width:720px;margin:0 auto}
+.header{text-align:center;margin-bottom:40px}
+.header h1{font-size:1.8rem;font-weight:700;color:#00204a;letter-spacing:-0.5px}
+.header p{margin-top:10px;font-size:0.95rem;color:#555;line-height:1.6;max-width:540px;margin-left:auto;margin-right:auto}
+.card{background:#fff;border-radius:12px;padding:32px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+.section-title{font-size:0.75rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#00204a;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #e8edf4}
+.question{margin-bottom:24px}
+.question label{display:block;font-size:0.92rem;font-weight:600;color:#1a1a2e;margin-bottom:10px;line-height:1.5}
+.question .hint{font-size:0.8rem;color:#777;font-weight:400;margin-top:2px;display:block}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid #dde3ed;border-radius:8px;cursor:pointer;transition:all 0.15s;font-size:0.88rem;color:#333}
+.option:hover{border-color:#00204a;background:#f0f4fa}
+.option input{accent-color:#00204a;width:16px;height:16px;flex-shrink:0}
+.option.selected{border-color:#00204a;background:#eef2f9;color:#00204a;font-weight:600}
+.btn-run{display:block;width:100%;padding:16px;background:#00204a;color:#fff;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:background 0.2s}
+.btn-run:hover{background:#003070}
+.result-card{display:none;background:#fff;border-radius:12px;padding:32px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+.verdict-wrap{text-align:center;margin-bottom:28px}
+.verdict-badge{display:inline-block;padding:8px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px}
+.v-proceed{background:#e8f8f0;color:#1a9e5c}
+.v-caution{background:#fff8e1;color:#f57f17}
+.v-hold{background:#fdf0ee;color:#c0392b}
+.verdict-text{font-size:0.94rem;color:#444;line-height:1.6;max-width:500px;margin:0 auto}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.score-lbl{font-size:0.8rem;font-weight:600;color:#00204a;width:160px;flex-shrink:0}
+.bar-t{flex:1;height:8px;background:#e8edf4;border-radius:4px;overflow:hidden}
+.bar-f{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.score-pct{font-size:0.8rem;font-weight:700;color:#00204a;width:36px;text-align:right}
+.findings{margin-bottom:20px}
+.findings-title{font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#00204a;margin-bottom:14px}
+.fi{display:flex;gap:10px;margin-bottom:10px;font-size:0.88rem;line-height:1.5;color:#333}
+.btn-reset{display:block;width:100%;padding:13px;background:transparent;color:#00204a;border:2px solid #00204a;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all 0.2s}
+.btn-reset:hover{background:#00204a;color:#fff}
+.error-msg{display:none;color:#c0392b;font-size:0.85rem;margin-top:12px;padding:10px 14px;background:#fdf0ee;border-radius:8px;border-left:3px solid #c0392b}
+.footer-note{text-align:center;font-size:0.78rem;color:#aaa;margin-top:24px;line-height:1.6}
+.dims{margin-bottom:24px}
+.dims-title{font-size:0.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#00204a;margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>IT Change Readiness Checker</h1>
+<p>Answer 8 questions about your planned change. Get an instant readiness score, a proceed or hold recommendation, and specific gaps to close before your change window.</p>
+</div>
+<form id="form">
+<div class="card">
+<div class="section-title">Change Definition</div>
+<div class="question">
+<label>1. Is the change scope fully documented and signed off?<span class="hint">All systems, users, and services affected must be named in the change record before approval.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q1" value="3">Yes - scope is fully documented, approved, and CMDB reflects all affected CIs</label>
+<label class="option"><input type="radio" name="q1" value="2">Partially - scope is documented but CMDB or approvals have gaps</label>
+<label class="option"><input type="radio" name="q1" value="1">No - scope is still being defined or approvals are pending</label>
+</div>
+</div>
+<div class="question">
+<label>2. Has a rollback plan been defined and tested?<span class="hint">A rollback plan that has never been tested is not a plan. It is an intention.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q2" value="3">Yes - rollback steps are documented and have been tested in a non-production environment</label>
+<label class="option"><input type="radio" name="q2" value="2">Yes - rollback steps are documented but have not been tested</label>
+<label class="option"><input type="radio" name="q2" value="1">No rollback plan exists</label>
+</div>
+</div>
+<div class="question">
+<label>3. Have all affected stakeholders been notified?<span class="hint">Include end users, service owners, downstream teams, and any third-party vendors involved.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q3" value="3">Yes - all stakeholders notified with sufficient lead time and confirmation received</label>
+<label class="option"><input type="radio" name="q3" value="2">Partially - some stakeholders notified, others still pending</label>
+<label class="option"><input type="radio" name="q3" value="1">No - stakeholder communication has not been sent</label>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="section-title">Technical Readiness</div>
+<div class="question">
+<label>4. Has the change been tested in a non-production environment?<span class="hint">Testing in production is not testing. It is applying the change early with consequences.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q4" value="3">Yes - fully tested in dev or UAT with results documented</label>
+<label class="option"><input type="radio" name="q4" value="2">Partially tested - core function tested but edge cases not covered</label>
+<label class="option"><input type="radio" name="q4" value="1">No testing has been completed</label>
+</div>
+</div>
+<div class="question">
+<label>5. Are all implementation resources confirmed and available?<span class="hint">Every person, tool, and access credential needed for the change window must be confirmed before the window opens.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q5" value="3">Yes - all engineers, tools, and access confirmed available for the change window</label>
+<label class="option"><input type="radio" name="q5" value="2">Mostly confirmed - minor gaps that can be resolved before the window</label>
+<label class="option"><input type="radio" name="q5" value="1">No - resource availability has not been confirmed</label>
+</div>
+</div>
+<div class="question">
+<label>6. Is there a known risk of conflict with other changes in the same window?<span class="hint">Concurrent changes on shared infrastructure or services multiply failure risk.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q6" value="3">No conflicts - change calendar checked and window is clear</label>
+<label class="option"><input type="radio" name="q6" value="2">Minor overlap - one other change in the window but on different systems</label>
+<label class="option"><input type="radio" name="q6" value="1">Conflict exists - another change affects shared infrastructure or services</label>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="section-title">Governance</div>
+<div class="question">
+<label>7. Has the change followed the correct approval process?<span class="hint">Standard changes need pre-approval. Normal changes need CAB or delegated authority. Emergency changes need documented fast-track approval.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q7" value="3">Yes - correct approval path followed and all sign-offs received</label>
+<label class="option"><input type="radio" name="q7" value="2">Partially - most approvals in place but one sign-off is outstanding</label>
+<label class="option"><input type="radio" name="q7" value="1">No - change has bypassed the approval process</label>
+</div>
+</div>
+<div class="question">
+<label>8. Has a post-implementation review been scheduled?<span class="hint">A PIR ensures lessons are captured. Changes without a PIR repeat their mistakes.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q8" value="2">Yes - PIR scheduled within 48 hours of implementation</label>
+<label class="option"><input type="radio" name="q8" value="1">No - PIR not yet scheduled</label>
+</div>
+</div>
+</div>
+<div class="error-msg" id="errorMsg">Please answer all 8 questions before checking readiness.</div>
+<button type="button" class="btn-run" onclick="check()">Check Change Readiness</button>
+</form>
+<div class="result-card" id="resultCard">
+<div class="section-title">Change Readiness Result</div>
+<div class="verdict-wrap">
+<div class="verdict-badge" id="vbadge"></div>
+<p class="verdict-text" id="vtext"></p>
+</div>
+<div class="dims">
+<div class="dims-title">Readiness by Area</div>
+<div id="dimBars"></div>
+</div>
+<div class="findings" id="findingsBlock"></div>
+<button type="button" class="btn-reset" onclick="reset()">Check Another Change</button>
+</div>
+<p class="footer-note">This tool checks change readiness against ITIL change management best practice.<br>Results are indicative only. No data is stored or transmitted. Nothing leaves your browser.</p>
+</div>
+<script>
+document.querySelectorAll('.option input').forEach(r=>{r.addEventListener('change',function(){const n=this.name;document.querySelectorAll(`input[name="${n}"]`).forEach(x=>x.closest('.option').classList.remove('selected'));this.closest('.option').classList.add('selected')})});
+function check(){
+  const qs=['q1','q2','q3','q4','q5','q6','q7','q8'];const a={};let ok=true;
+  qs.forEach(q=>{const v=document.querySelector(`input[name="${q}"]:checked`);if(!v)ok=false;else a[q]=parseInt(v.value)});
+  const err=document.getElementById('errorMsg');
+  if(!ok){err.style.display='block';err.scrollIntoView({behavior:'smooth',block:'center'});return}
+  err.style.display='none';
+  const def=a.q1+a.q2+a.q3;
+  const tech=a.q4+a.q5+a.q6;
+  const gov=a.q7+a.q8;
+  const total=def+tech+gov;
+  const maxDef=9,maxTech=9,maxGov=5,maxTotal=23;
+  const defPct=Math.round(def/maxDef*100);
+  const techPct=Math.round(tech/maxTech*100);
+  const govPct=Math.round(gov/maxGov*100);
+  const score=Math.round(total/maxTotal*100);
+  let verdict,vclass,vtext,findings=[];
+  if(score>=85){verdict='Proceed';vclass='v-proceed';vtext='This change is ready to proceed. All critical readiness criteria are met. Confirm resources and access in the hour before the window opens.'}
+  else if(score>=65){verdict='Proceed with Caution';vclass='v-caution';vtext='This change can proceed but has open gaps that increase risk. Address the findings below before the window opens or accept the documented risk.'}
+  else{verdict='Hold - Not Ready';vclass='v-hold';vtext='This change is not ready to proceed. One or more critical readiness criteria are not met. Proceeding carries a high risk of failure or extended outage.'}
+  if(a.q1<3)findings.push({icon:'⚠️',text:'Scope documentation or CMDB alignment is incomplete. This is the most common cause of change-related incidents.'});
+  if(a.q2===1)findings.push({icon:'🚨',text:'No rollback plan exists. Do not proceed without a tested rollback path.'});
+  if(a.q2===2)findings.push({icon:'⚠️',text:'Rollback plan is not tested. Run a rollback drill in a non-production environment before the change window.'});
+  if(a.q3<3)findings.push({icon:'⚠️',text:'Stakeholder notification is incomplete. Confirm all affected users, service owners, and vendors have been notified.'});
+  if(a.q4===1)findings.push({icon:'🚨',text:'No non-production testing has been completed. This is a critical gap. Do not proceed to production without testing.'});
+  if(a.q5<3)findings.push({icon:'⚠️',text:'Resource availability is not fully confirmed. Lock down all engineers, tools, and access credentials before the window.'});
+  if(a.q6===1)findings.push({icon:'🚨',text:'A conflicting change exists in the same window. Coordinate with the other change team or reschedule one of the changes.'});
+  if(a.q7<3)findings.push({icon:'⚠️',text:'Approval process has gaps. All required sign-offs must be in place before the window opens.'});
+  if(a.q8===1)findings.push({icon:'ℹ️',text:'No PIR scheduled. Book the review now - within 48 hours of implementation close.'});
+  if(!findings.length)findings.push({icon:'✅',text:'No critical gaps identified. Confirm all resources 1 hour before the window and proceed as planned.'});
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('form').style.display='none';
+  const vb=document.getElementById('vbadge');vb.textContent=verdict;vb.className='verdict-badge '+vclass;
+  document.getElementById('vtext').textContent=vtext;
+  const getColor=p=>p>=80?'#1a9e5c':p>=60?'#d68910':p>=40?'#e67e22':'#c0392b';
+  document.getElementById('dimBars').innerHTML=[
+    {label:'Change Definition',pct:defPct},{label:'Technical Readiness',pct:techPct},{label:'Governance',pct:govPct}
+  ].map(d=>`<div class="score-row"><span class="score-lbl">${d.label}</span><div class="bar-t"><div class="bar-f" id="bd_${d.label.replace(/ /g,'_')}" style="width:0%;background:${getColor(d.pct)}"></div></div><span class="score-pct">${d.pct}%</span></div>`).join('');
+  setTimeout(()=>{
+    [{label:'Change_Definition',pct:defPct},{label:'Technical_Readiness',pct:techPct},{label:'Governance',pct:govPct}]
+    .forEach(d=>document.getElementById('bd_'+d.label).style.width=d.pct+'%');
+  },100);
+  document.getElementById('findingsBlock').innerHTML='<div class="findings-title">What to address before the window</div>'+findings.map(f=>`<div class="fi"><span>${f.icon}</span><span>${f.text}</span></div>`).join('');
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function reset(){document.getElementById('form').style.display='block';document.getElementById('resultCard').style.display='none';document.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false;r.closest('.option').classList.remove('selected')});window.scrollTo({top:0,behavior:'smooth'})}
+</script>
+</body>
+</html>
