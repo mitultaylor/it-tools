@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Leadership Job Search Tracker  -  IT Operations Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F4EFE6;color:#4B3621;min-height:100vh}
+.site-nav{background:#4B3621;padding:0 32px;height:48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F4EFE6;text-decoration:none}
+.nav-links a{font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#D4B896;text-decoration:none}
+.nav-links a:hover{color:#F4EFE6}
+.container{max-width:1100px;margin:0 auto;padding:32px 20px 64px}
+.tool-header{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #D4B896}
+.tool-header h1{font-size:1.5rem;font-weight:900;letter-spacing:-.5px;color:#4B3621;margin-bottom:6px}
+.tool-header p{font-size:.84rem;color:#6B4F2A;line-height:1.6}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:2px solid #D4B896;margin-bottom:24px}
+.tab{padding:10px 20px;font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;background:transparent;cursor:pointer;color:#9A7E5A;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab.active{color:#4B3621;border-bottom-color:#4B3621}
+.tab:hover{color:#4B3621}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ADD FORM */
+.add-card{background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:22px;margin-bottom:20px}
+.add-card h3{font-size:.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #D4B896}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.form-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.field label{display:block;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8B6914;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1.5px solid #D4B896;border-radius:5px;font-size:.83rem;color:#4B3621;background:#F4EFE6;font-family:'Inter',sans-serif;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#8B6914;background:#FBF7F2}
+.field textarea{resize:vertical;min-height:60px}
+.btn-add{padding:11px 22px;background:#4B3621;color:#F4EFE6;border:none;border-radius:5px;font-size:.78rem;font-weight:800;cursor:pointer;transition:background .2s}
+.btn-add:hover{background:#3a2818}
+.btn-secondary{padding:11px 18px;background:transparent;color:#4B3621;border:1.5px solid #4B3621;border-radius:5px;font-size:.78rem;font-weight:800;cursor:pointer;margin-left:8px;transition:all .2s}
+.btn-secondary:hover{background:#4B3621;color:#F4EFE6}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.stat-box{background:#FBF7F2;border:1px solid #D4B896;border-radius:5px;padding:14px;text-align:center}
+.stat-box .sn{font-size:1.6rem;font-weight:900;letter-spacing:-1px;color:#4B3621;line-height:1}
+.stat-box .sl{font-size:.58rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7E5A;margin-top:3px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:900px}
+th{text-align:left;padding:10px 12px;font-size:.6rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;border-bottom:2px solid #D4B896;white-space:nowrap;background:#FBF7F2}
+td{padding:10px 12px;border-bottom:1px solid #EDE4D5;color:#4B3621;vertical-align:middle}
+tr:hover td{background:#FBF7F2}
+.badge{display:inline-block;padding:3px 8px;border-radius:3px;font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.b-active{background:#D4EDDA;color:#1A5C2A}
+.b-applied{background:#FFF3CD;color:#7B5800}
+.b-closed{background:#F8D7DA;color:#7B1A1A}
+.b-interview{background:#D4E4FF;color:#1A3C8B}
+.b-offer{background:#E4D4FF;color:#3C1A8B}
+.b-us{background:#E8E0D4;color:#4B3621}
+.b-india{background:#FFF0D4;color:#7B4800}
+.b-dubai{background:#D4F0FF;color:#004878}
+.b-overdue{background:#F8D7DA;color:#7B1A1A}
+.b-due{background:#FFF3CD;color:#7B5800}
+.b-ok{background:#D4EDDA;color:#1A5C2A}
+.ats-bar{display:flex;align-items:center;gap:6px}
+.ats-track{width:60px;height:5px;background:#D4B896;border-radius:3px;overflow:hidden}
+.ats-fill{height:100%;border-radius:3px;background:#8B6914}
+.btn-del{background:none;border:none;cursor:pointer;color:#D4B896;font-size:.9rem;padding:2px 4px;transition:color .15s}
+.btn-del:hover{color:#9B2B2B}
+.btn-edit{background:none;border:none;cursor:pointer;color:#D4B896;font-size:.75rem;padding:2px 6px;transition:color .15s;font-weight:700}
+.btn-edit:hover{color:#4B3621}
+
+/* EMAIL LOG */
+.email-log{background:#FBF7F2;border:1px solid #D4B896;border-radius:5px;padding:14px;margin-bottom:12px}
+.email-log h4{font-size:.62rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#8B6914;margin-bottom:10px}
+.email-row{display:flex;gap:12px;align-items:center;margin-bottom:8px;font-size:.78rem;color:#4B3621;flex-wrap:wrap}
+.email-row span{color:#9A7E5A;font-size:.7rem}
+.empty-state{text-align:center;padding:48px 20px;color:#9A7E5A;font-size:.84rem}
+.empty-state strong{display:block;font-size:1rem;font-weight:800;color:#D4B896;margin-bottom:6px}
+
+.footer-note{text-align:center;font-size:.7rem;color:#9A7E5A;margin-top:28px;line-height:1.7}
+.footer-note a{color:#9A7E5A}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="nav-brand" href="https://mitultaylor.github.io/it-tools/">IT Operations Tools</a>
+  <div class="nav-links"><a href="https://mitultaylor.github.io/it-tools/">All Tools</a></div>
+</nav>
+<div class="container">
+<div class="tool-header">
+  <h1>IT Leadership Job Search Tracker</h1>
+  <p>Track every Director and VP IT application across US, India, and Dubai. Five-gate evaluation, ATS score, email cadence, and overdue alerts. Data saves in your browser. No login. Nothing leaves your device.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('dashboard')">Dashboard</button>
+  <button class="tab" onclick="switchTab('add')">Add Application</button>
+  <button class="tab" onclick="switchTab('emails')">Email Log</button>
+  <button class="tab" onclick="switchTab('export')">Export</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="tab-content active" id="tab-dashboard">
+  <div class="stats-bar" id="statsBar"></div>
+  <div class="table-wrap">
+    <table id="appTable">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Market</th>
+          <th>Status</th>
+          <th>ATS Score</th>
+          <th>E1 Sent</th>
+          <th>E2 Sent</th>
+          <th>E3 Sent</th>
+          <th>Next Action</th>
+          <th>Email Cadence</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="appBody"></tbody>
+    </table>
+  </div>
+  <div class="empty-state" id="emptyState" style="display:none">
+    <strong>No applications yet</strong>
+    Go to "Add Application" to track your first role.
+  </div>
+</div>
+
+<!-- ADD APPLICATION -->
+<div class="tab-content" id="tab-add">
+  <div class="add-card">
+    <h3 id="formTitle">New Application</h3>
+    <div class="form-grid">
+      <div class="field"><label>Company Name *</label><input type="text" id="f-company" placeholder="e.g. Harvey AI"></div>
+      <div class="field"><label>Role Title *</label><input type="text" id="f-role" placeholder="e.g. Director IT Operations"></div>
+      <div class="field"><label>Market *</label>
+        <select id="f-market">
+          <option value="">Select market</option>
+          <option value="US">US</option>
+          <option value="India">India</option>
+          <option value="Dubai">Dubai</option>
+        </select>
+      </div>
+      <div class="field"><label>Hiring Manager Name</label><input type="text" id="f-hm-name" placeholder="e.g. John Smith"></div>
+      <div class="field"><label>Hiring Manager Email</label><input type="text" id="f-hm-email" placeholder="e.g. john@company.com"></div>
+      <div class="field"><label>Status</label>
+        <select id="f-status">
+          <option value="Applied">Applied</option>
+          <option value="Active">Active  -  Emailing</option>
+          <option value="Interview">Interview Stage</option>
+          <option value="Offer">Offer Received</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>E1 Sent Date</label><input type="date" id="f-e1"></div>
+      <div class="field"><label>E2 Sent Date</label><input type="date" id="f-e2"></div>
+      <div class="field"><label>E3 Sent Date</label><input type="date" id="f-e3"></div>
+    </div>
+    <h3 style="margin-top:20px">Five-Gate Evaluation</h3>
+    <div class="form-grid" style="margin-top:14px">
+      <div class="field"><label>Gate 1  -  Sector fit?</label>
+        <select id="g1"><option value="0">Not assessed</option><option value="1">Fail</option><option value="2">Pass</option></select>
+      </div>
+      <div class="field"><label>Gate 2  -  Function match?</label>
+        <select id="g2"><option value="0">Not assessed</option><option value="1">Fail</option><option value="2">Pass</option></select>
+      </div>
+      <div class="field"><label>Gate 3  -  Comp clears floor?</label>
+        <select id="g3"><option value="0">Not assessed</option><option value="1">Fail</option><option value="2">Pass</option></select>
+      </div>
+      <div class="field"><label>Gate 4  -  Location viable?</label>
+        <select id="g4"><option value="0">Not assessed</option><option value="1">Fail</option><option value="2">Pass</option></select>
+      </div>
+      <div class="field"><label>Gate 5  -  Company legitimate?</label>
+        <select id="g5"><option value="0">Not assessed</option><option value="1">Fail</option><option value="2">Pass</option></select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:14px"><label>Notes</label><textarea id="f-notes" placeholder="Hiring manager research, portal links, next steps..."></textarea></div>
+    <button class="btn-add" onclick="saveApp()">Save Application</button>
+    <button class="btn-secondary" onclick="clearForm()">Clear</button>
+    <span id="form-msg" style="font-size:.75rem;color:#8B6914;margin-left:12px"></span>
+  </div>
+</div>
+
+<!-- EMAIL LOG -->
+<div class="tab-content" id="tab-emails">
+  <div class="add-card">
+    <h3>Log an Email</h3>
+    <div class="form-grid-2">
+      <div class="field"><label>Application</label>
+        <select id="el-app"><option value="">Select application</option></select>
+      </div>
+      <div class="field"><label>Email Number</label>
+        <select id="el-num"><option value="E1">Email 1</option><option value="E2">Email 2</option><option value="E3">Email 3</option></select>
+      </div>
+      <div class="field"><label>Date Sent</label><input type="date" id="el-date"></div>
+      <div class="field"><label>Outcome</label>
+        <select id="el-outcome">
+          <option value="Sent">Sent  -  awaiting reply</option>
+          <option value="Replied">Reply received</option>
+          <option value="Bounced">Bounced</option>
+          <option value="OOO">Out of office received</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:14px"><label>Notes</label><textarea id="el-notes" placeholder="Subject line used, reply received, next step..."></textarea></div>
+    <button class="btn-add" onclick="logEmail()">Log Email</button>
+  </div>
+  <div id="emailLogList"></div>
+</div>
+
+<!-- EXPORT -->
+<div class="tab-content" id="tab-export">
+  <div class="add-card">
+    <h3>Export to CSV</h3>
+    <p style="font-size:.82rem;color:#6B4F2A;margin-bottom:16px;line-height:1.6">Download all applications as a CSV file. Opens in Excel or Google Sheets. Your data is stored locally in your browser and is not sent anywhere.</p>
+    <button class="btn-add" onclick="exportCSV()">Download CSV</button>
+  </div>
+  <div class="add-card" style="margin-top:0">
+    <h3>Clear All Data</h3>
+    <p style="font-size:.82rem;color:#6B4F2A;margin-bottom:16px;line-height:1.6">Permanently delete all applications and email logs from your browser. This cannot be undone.</p>
+    <button class="btn-secondary" style="border-color:#9B2B2B;color:#9B2B2B" onclick="clearAll()">Clear All Data</button>
+  </div>
+</div>
+
+<p class="footer-note">
+  This tool is for personal job search tracking only. It does not constitute career, recruitment, or professional advice.<br>
+  Data is stored in your browser's localStorage and is not collected, transmitted, or accessible by anyone else.<br>
+  Licensed for single-user use only. Redistribution, resale, or sharing of this file is prohibited.<br>
+  All sales are final. No refunds.<br>
+  &copy; 2026 Mitul Tailor &nbsp;&middot;&nbsp; <a href="https://mitultaylor.github.io/it-tools/">All Tools</a>
+</p>
+</div>
+
+<script>
+let apps = JSON.parse(localStorage.getItem('itjobs') || '[]');
+let emails = JSON.parse(localStorage.getItem('itemails') || '[]');
+let editId = null;
+
+function save(){localStorage.setItem('itjobs',JSON.stringify(apps));localStorage.setItem('itemails',JSON.stringify(emails))}
+
+function switchTab(t){
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.querySelectorAll('.tab')[['dashboard','add','emails','export'].indexOf(t)].classList.add('active');
+  if(t==='dashboard')renderDashboard();
+  if(t==='emails')renderEmailLog();
+}
+
+function atsScore(a){
+  const gates=[a.g1,a.g2,a.g3,a.g4,a.g5].map(Number);
+  const passed=gates.filter(g=>g===2).length;
+  return Math.round(passed/5*100);
+}
+
+function emailCadence(a){
+  const now=new Date();
+  const last=a.e3?a.e3:a.e2?a.e2:a.e1?a.e1:null;
+  if(!last) return {label:'No email sent',cls:'b-ok'};
+  const diff=Math.round((now-new Date(last))/(1000*60*60*24));
+  if(a.status==='Closed') return {label:'File closed',cls:'b-closed'};
+  if(!a.e1) return {label:'E1 not sent',cls:'b-ok'};
+  if(a.e3 && diff>4) return {label:'File closes soon',cls:'b-overdue'};
+  if(diff>7 && !a.e2) return {label:'E2 overdue',cls:'b-overdue'};
+  if(diff>7 && a.e2 && !a.e3) return {label:'E3 overdue',cls:'b-overdue'};
+  if(diff>=5 && !a.e2) return {label:'E2 due soon',cls:'b-due'};
+  if(diff>=5 && a.e2 && !a.e3) return {label:'E3 due soon',cls:'b-due'};
+  return {label:'On track',cls:'b-ok'};
+}
+
+function nextAction(a){
+  if(a.status==='Closed') return 'File closed';
+  if(!a.e1) return 'Send Email 1';
+  if(!a.e2) return 'Send Email 2';
+  if(!a.e3) return 'Send Email 3 (final)';
+  return 'Await response';
+}
+
+function statusCls(s){return{Applied:'b-applied',Active:'b-active',Interview:'b-interview',Offer:'b-offer',Closed:'b-closed'}[s]||'b-applied'}
+function mktCls(m){return{US:'b-us',India:'b-india',Dubai:'b-dubai'}[m]||'b-us'}
+
+function renderDashboard(){
+  const body=document.getElementById('appBody');
+  const empty=document.getElementById('emptyState');
+  if(!apps.length){body.innerHTML='';empty.style.display='block';renderStats();return}
+  empty.style.display='none';
+  body.innerHTML=apps.map((a,i)=>{
+    const ats=atsScore(a);
+    const cad=emailCadence(a);
+    const na=nextAction(a);
+    return `<tr>
+      <td><strong>${a.company}</strong>${a.hmName?'<br><span style="font-size:.68rem;color:#9A7E5A">'+a.hmName+'</span>':''}</td>
+      <td style="max-width:180px;font-size:.74rem">${a.role}</td>
+      <td><span class="badge ${mktCls(a.market)}">${a.market}</span></td>
+      <td><span class="badge ${statusCls(a.status)}">${a.status}</span></td>
+      <td>
+        <div class="ats-bar">
+          <div class="ats-track"><div class="ats-fill" style="width:${ats}%"></div></div>
+          <span style="font-size:.7rem;font-weight:800;color:#4B3621">${ats}%</span>
+        </div>
+      </td>
+      <td style="font-size:.72rem">${a.e1||'--'}</td>
+      <td style="font-size:.72rem">${a.e2||'--'}</td>
+      <td style="font-size:.72rem">${a.e3||'--'}</td>
+      <td style="font-size:.72rem;font-weight:600">${na}</td>
+      <td><span class="badge ${cad.cls}">${cad.label}</span></td>
+      <td>
+        <button class="btn-edit" onclick="editApp(${i})">Edit</button>
+        <button class="btn-del" onclick="delApp(${i})" title="Delete">&#10005;</button>
+      </td>
+    </tr>`;
+  }).join('');
+  renderStats();
+}
+
+function renderStats(){
+  const total=apps.length;
+  const active=apps.filter(a=>a.status==='Active').length;
+  const interview=apps.filter(a=>a.status==='Interview').length;
+  const offer=apps.filter(a=>a.status==='Offer').length;
+  const overdue=apps.filter(a=>emailCadence(a).cls==='b-overdue').length;
+  document.getElementById('statsBar').innerHTML=
+    `<div class="stat-box"><div class="sn">${total}</div><div class="sl">Total</div></div>`+
+    `<div class="stat-box"><div class="sn">${active}</div><div class="sl">Active</div></div>`+
+    `<div class="stat-box"><div class="sn">${interview}</div><div class="sl">Interview</div></div>`+
+    `<div class="stat-box"><div class="sn">${offer}</div><div class="sl">Offer</div></div>`+
+    `<div class="stat-box"><div class="sn" style="${overdue?'color:#9B2B2B':''}">${overdue}</div><div class="sl">Overdue</div></div>`;
+}
+
+function saveApp(){
+  const company=document.getElementById('f-company').value.trim();
+  const role=document.getElementById('f-role').value.trim();
+  const market=document.getElementById('f-market').value;
+  if(!company||!role||!market){document.getElementById('form-msg').textContent='Company, role, and market are required.';return}
+  const app={
+    id:editId||Date.now(),
+    company,role,market,
+    hmName:document.getElementById('f-hm-name').value.trim(),
+    hmEmail:document.getElementById('f-hm-email').value.trim(),
+    status:document.getElementById('f-status').value,
+    e1:document.getElementById('f-e1').value,
+    e2:document.getElementById('f-e2').value,
+    e3:document.getElementById('f-e3').value,
+    g1:document.getElementById('g1').value,
+    g2:document.getElementById('g2').value,
+    g3:document.getElementById('g3').value,
+    g4:document.getElementById('g4').value,
+    g5:document.getElementById('g5').value,
+    notes:document.getElementById('f-notes').value.trim(),
+  };
+  if(editId){const idx=apps.findIndex(a=>a.id===editId);if(idx>-1)apps[idx]=app;editId=null;document.getElementById('formTitle').textContent='New Application';}
+  else{apps.push(app)}
+  save();clearForm();document.getElementById('form-msg').textContent='Saved.';
+  setTimeout(()=>document.getElementById('form-msg').textContent='',2000);
+}
+
+function editApp(i){
+  const a=apps[i];editId=a.id;
+  document.getElementById('f-company').value=a.company;
+  document.getElementById('f-role').value=a.role;
+  document.getElementById('f-market').value=a.market;
+  document.getElementById('f-hm-name').value=a.hmName||'';
+  document.getElementById('f-hm-email').value=a.hmEmail||'';
+  document.getElementById('f-status').value=a.status;
+  document.getElementById('f-e1').value=a.e1||'';
+  document.getElementById('f-e2').value=a.e2||'';
+  document.getElementById('f-e3').value=a.e3||'';
+  document.getElementById('g1').value=a.g1||0;
+  document.getElementById('g2').value=a.g2||0;
+  document.getElementById('g3').value=a.g3||0;
+  document.getElementById('g4').value=a.g4||0;
+  document.getElementById('g5').value=a.g5||0;
+  document.getElementById('f-notes').value=a.notes||'';
+  document.getElementById('formTitle').textContent='Edit Application';
+  switchTab('add');
+}
+
+function delApp(i){if(confirm('Delete this application?')){apps.splice(i,1);save();renderDashboard()}}
+
+function clearForm(){
+  ['f-company','f-role','f-hm-name','f-hm-email','f-e1','f-e2','f-e3','f-notes'].forEach(id=>document.getElementById(id).value='');
+  ['f-market','f-status','g1','g2','g3','g4','g5'].forEach(id=>document.getElementById(id).selectedIndex=0);
+  editId=null;document.getElementById('formTitle').textContent='New Application';
+}
+
+function renderEmailLog(){
+  const sel=document.getElementById('el-app');
+  sel.innerHTML='<option value="">Select application</option>'+apps.map(a=>`<option value="${a.id}">${a.company} - ${a.role}</option>`).join('');
+  const list=document.getElementById('emailLogList');
+  if(!emails.length){list.innerHTML='<div class="empty-state"><strong>No emails logged</strong>Use the form above to log sent emails.</div>';return}
+  const grouped={};
+  emails.forEach(e=>{if(!grouped[e.appId])grouped[e.appId]=[];grouped[e.appId].push(e)});
+  list.innerHTML=Object.entries(grouped).map(([appId,elist])=>{
+    const app=apps.find(a=>a.id==appId);
+    if(!app)return'';
+    return`<div class="email-log"><h4>${app.company} - ${app.role}</h4>`+
+      elist.map(e=>`<div class="email-row"><strong>${e.num}</strong><span>${e.date}</span><span class="badge ${e.outcome==='Replied'?'b-interview':e.outcome==='Bounced'?'b-closed':'b-applied'}">${e.outcome}</span>${e.notes?'<span>'+e.notes+'</span>':''}<button class="btn-del" onclick="delEmail('${e.id}')">&#10005;</button></div>`).join('')+
+      '</div>';
+  }).join('');
+}
+
+function logEmail(){
+  const appId=document.getElementById('el-app').value;
+  const date=document.getElementById('el-date').value;
+  if(!appId||!date){alert('Select an application and date.');return}
+  const em={id:Date.now(),appId,num:document.getElementById('el-num').value,date,outcome:document.getElementById('el-outcome').value,notes:document.getElementById('el-notes').value.trim()};
+  emails.push(em);
+  // Also update app email dates
+  const app=apps.find(a=>a.id==appId);
+  if(app){
+    if(em.num==='E1')app.e1=date;
+    if(em.num==='E2')app.e2=date;
+    if(em.num==='E3')app.e3=date;
+  }
+  save();renderEmailLog();
+  document.getElementById('el-notes').value='';
+}
+
+function delEmail(id){emails=emails.filter(e=>e.id!=id);save();renderEmailLog()}
+
+function exportCSV(){
+  if(!apps.length){alert('No applications to export.');return}
+  const headers=['Company','Role','Market','Status','HM Name','HM Email','ATS Score','E1 Sent','E2 Sent','E3 Sent','G1','G2','G3','G4','G5','Notes'];
+  const rows=apps.map(a=>[a.company,a.role,a.market,a.status,a.hmName||'',a.hmEmail||'',atsScore(a)+'%',a.e1||'',a.e2||'',a.e3||'',a.g1,a.g2,a.g3,a.g4,a.g5,(a.notes||'').replace(/,/g,';')]);
+  const csv=[headers,...rows].map(r=>r.map(c=>'"'+c+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='it-job-tracker-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+function clearAll(){
+  if(confirm('Delete ALL applications and email logs? This cannot be undone.')){
+    apps=[];emails=[];save();renderDashboard();renderEmailLog();
+  }
+}
+
+renderDashboard();
+</script>
+</body>
+</html>

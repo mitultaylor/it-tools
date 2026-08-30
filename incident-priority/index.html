@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Incident Priority Calculator  -  IT Operations Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F4EFE6;color:#4B3621;min-height:100vh;padding:0}
+.site-nav{background:#4B3621;padding:0 32px;height:48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F4EFE6;text-decoration:none}
+.nav-links{display:flex;gap:24px}
+.nav-links a{font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#D4B896;text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:#F4EFE6}
+.container{max-width:700px;margin:0 auto;padding:40px 20px 64px}
+.tool-header{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid #D4B896}
+.tool-header h1{font-size:1.5rem;font-weight:900;letter-spacing:-.5px;color:#4B3621;margin-bottom:8px;line-height:1.2}
+.tool-header p{font-size:.86rem;color:#6B4F2A;line-height:1.65}
+.card{background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:26px;margin-bottom:14px}
+.section-title{font-size:.62rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#8B6914;margin-bottom:18px;padding-bottom:9px;border-bottom:1px solid #D4B896}
+.question{margin-bottom:20px}
+.question label{display:block;font-size:.88rem;font-weight:700;color:#4B3621;margin-bottom:7px;line-height:1.5}
+.question .hint{font-size:.74rem;color:#6B4F2A;font-weight:400;margin-top:2px;display:block}
+.options{display:flex;flex-direction:column;gap:7px}
+.option{display:flex;align-items:center;gap:14px;padding:11px 16px;border:1.5px solid #D4B896;border-radius:6px;cursor:pointer;font-size:.83rem;color:#4B3621;line-height:1.45;transition:border-color .15s,background .15s}
+.option:hover{border-color:#8B6914;background:#EDE4D5}
+.option input[type="radio"]{width:16px;height:16px;flex-shrink:0;margin:0;accent-color:#8B6914;cursor:pointer}
+.option.selected{border-color:#4B3621;background:#EDE4D5;color:#4B3621;font-weight:700}
+.btn-run{display:block;width:100%;padding:14px;background:#4B3621;color:#F4EFE6;border:none;border-radius:6px;font-size:.88rem;font-weight:800;letter-spacing:.5px;cursor:pointer;margin-top:10px;transition:background .2s}
+.btn-run:hover{background:#3a2818}
+.btn-reset{display:block;width:100%;padding:12px;background:transparent;color:#4B3621;border:2px solid #4B3621;border-radius:6px;font-size:.86rem;font-weight:800;cursor:pointer;margin-top:8px;transition:all .2s}
+.btn-reset:hover{background:#4B3621;color:#F4EFE6}
+.error-msg{display:none;color:#7B1A1A;font-size:.8rem;margin-top:10px;padding:10px 14px;background:#F5E4E4;border-radius:6px;border-left:3px solid #9B2B2B}
+.result-card{display:none;background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:26px;margin-bottom:14px}
+.verdict-wrap{text-align:center;margin-bottom:26px}
+.verdict-badge{display:inline-block;padding:8px 24px;border-radius:4px;font-size:.76rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.v-proceed{background:#D4EDDA;color:#1A5C2A}
+.v-caution{background:#FFF3CD;color:#7B5800}
+.v-hold{background:#F8D7DA;color:#7B1A1A}
+.verdict-text{font-size:.86rem;color:#6B4F2A;line-height:1.6;max-width:500px;margin:0 auto}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+.score-lbl{font-size:.74rem;font-weight:700;color:#4B3621;width:160px;flex-shrink:0}
+.bar-t{flex:1;height:6px;background:#D4B896;border-radius:3px;overflow:hidden}
+.bar-f{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.score-pct{font-size:.74rem;font-weight:800;color:#4B3621;width:36px;text-align:right}
+.findings{margin-bottom:18px}
+.findings-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid #D4B896}
+.fi{display:flex;gap:10px;margin-bottom:9px;font-size:.82rem;line-height:1.5;color:#4B3621}
+.dims{margin-bottom:22px}
+.dims-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:13px}
+.priority-badge{display:inline-block;padding:10px 28px;border-radius:4px;font-size:1.15rem;font-weight:900;letter-spacing:-.3px;margin-bottom:10px}
+.p1{background:#F8D7DA;color:#7B1A1A}
+.p2{background:#FFF3CD;color:#7B5800}
+.p3{background:#D4EDDA;color:#1A5C2A}
+.p4{background:#E8E0D4;color:#4B3621}
+.sla-clock{background:#EDE4D5;border-radius:6px;padding:16px;margin-bottom:20px;text-align:center;border:1px solid #D4B896}
+.sla-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:6px}
+.sla-time{font-size:2rem;font-weight:900;color:#4B3621;letter-spacing:-1px;line-height:1}
+.sla-sub{font-size:.72rem;color:#6B4F2A;margin-top:4px}
+.mkt{margin-bottom:22px}
+.mkt-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:13px}
+.mkt-row{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:9px}
+.mkt-label{font-size:.76rem;font-weight:700;color:#4B3621}
+.mkt-range{font-size:.72rem;font-weight:800;color:#4B3621;text-align:right;white-space:nowrap}
+.insight{background:#EDE4D5;border-radius:6px;padding:16px;margin-bottom:16px;border:1px solid #D4B896}
+.insight-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:7px}
+.insight-text{font-size:.8rem;color:#4B3621;line-height:1.6}
+.footer-note{text-align:center;font-size:.7rem;color:#9A7E5A;margin-top:28px;line-height:1.7}
+.footer-note a{color:#9A7E5A}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="nav-brand" href="https://mitultaylor.github.io/it-tools/">IT Operations Tools</a>
+  <div class="nav-links"><a href="https://mitultaylor.github.io/it-tools/">All Tools</a></div>
+</nav>
+<div class="container">
+<div class="tool-header">
+  <h1>IT Incident Priority Calculator</h1>
+  <p>6 questions across impact and urgency. Instant priority level, SLA response target, and specific escalation steps. No login. Nothing stored.</p>
+</div>
+<form id="auditForm">
+
+<div class="card">
+<div class="section-title">Impact</div>
+
+<div class="question">
+<label>1. Who is affected?<span class="hint">Count users who cannot perform their primary work function.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q1" value="4">&nbsp;&nbsp;A Senior Partner, Managing Director, or C-Suite executive</label>
+<label class="option"><input type="radio" name="q1" value="3">&nbsp;&nbsp;Multiple VIPs or a whole department (20 or more users)</label>
+<label class="option"><input type="radio" name="q1" value="2">&nbsp;&nbsp;A small team or business unit (5 to 19 users)</label>
+<label class="option"><input type="radio" name="q1" value="1">&nbsp;&nbsp;One or two standard users</label>
+</div>
+</div>
+
+<div class="question">
+<label>2. What is the business impact?<span class="hint">Assess the effect on revenue, client commitments, or regulatory obligations.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q2" value="4">&nbsp;&nbsp;Client-facing systems down or a regulatory deadline at risk</label>
+<label class="option"><input type="radio" name="q2" value="3">&nbsp;&nbsp;A core business process is blocked  -  work cannot continue</label>
+<label class="option"><input type="radio" name="q2" value="2">&nbsp;&nbsp;Significant workaround required  -  productivity is reduced</label>
+<label class="option"><input type="radio" name="q2" value="1">&nbsp;&nbsp;Minor inconvenience  -  user can continue with an alternative</label>
+</div>
+</div>
+
+<div class="question">
+<label>3. Is there a workaround?<span class="hint">A workaround lets the user continue working, even if not at full capacity.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q3" value="1">&nbsp;&nbsp;No workaround exists</label>
+<label class="option"><input type="radio" name="q3" value="2">&nbsp;&nbsp;Workaround exists but is complex or time-consuming</label>
+<label class="option"><input type="radio" name="q3" value="3">&nbsp;&nbsp;Simple workaround available</label>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">Urgency</div>
+
+<div class="question">
+<label>4. How time-sensitive is this?<span class="hint">How quickly does this need resolving before the business impact gets worse?</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q4" value="4">&nbsp;&nbsp;Immediate  -  every minute of delay increases impact</label>
+<label class="option"><input type="radio" name="q4" value="3">&nbsp;&nbsp;High  -  must be resolved within 2 hours</label>
+<label class="option"><input type="radio" name="q4" value="2">&nbsp;&nbsp;Medium  -  can wait up to 8 hours</label>
+<label class="option"><input type="radio" name="q4" value="1">&nbsp;&nbsp;Low  -  next business day resolution is acceptable</label>
+</div>
+</div>
+
+<div class="question">
+<label>5. Is a deadline or scheduled event affected?<span class="hint">Board meetings, client presentations, audit deadlines, or time-critical deliverables.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q5" value="3">&nbsp;&nbsp;Yes  -  deadline within the next 2 hours</label>
+<label class="option"><input type="radio" name="q5" value="2">&nbsp;&nbsp;Yes  -  deadline today</label>
+<label class="option"><input type="radio" name="q5" value="1">&nbsp;&nbsp;No deadline affected</label>
+</div>
+</div>
+
+<div class="question">
+<label>6. Is this spreading to more users or systems?<span class="hint">Is the problem affecting more people or services since it was first reported?</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q6" value="3">&nbsp;&nbsp;Yes  -  actively spreading</label>
+<label class="option"><input type="radio" name="q6" value="2">&nbsp;&nbsp;Possibly  -  early signs of wider impact</label>
+<label class="option"><input type="radio" name="q6" value="1">&nbsp;&nbsp;No  -  contained to original scope</label>
+</div>
+</div>
+</div>
+
+<div class="error-msg" id="errorMsg">Answer all 6 questions before calculating priority.</div>
+<button type="button" class="btn-run" onclick="calcPriority()">Calculate Priority</button>
+</form>
+
+<div class="result-card" id="resultCard">
+<div class="section-title">Incident Priority</div>
+<div class="verdict-wrap">
+  <div class="priority-badge" id="priorityBadge"></div>
+  <p class="verdict-text" id="priorityText"></p>
+</div>
+<div class="sla-clock">
+  <div class="sla-title">SLA Response Target</div>
+  <div class="sla-time" id="slaTime"></div>
+  <div class="sla-sub" id="slaSub"></div>
+</div>
+<div class="findings" id="findingsBlock"></div>
+<button type="button" class="btn-reset" onclick="resetCalc()">Calculate Another</button>
+</div>
+
+<p class="footer-note">
+  This tool is a self-assessment based on the ITIL impact and urgency priority matrix.<br>
+  Results are indicative only and do not constitute professional IT or service management advice.<br>
+  ITIL&reg; is a registered trade mark of AXELOS Limited. All rights reserved.<br>
+  Licensed for single-user use only. Redistribution, resale, or sharing of this file is prohibited.<br>
+  No data is collected, stored, or transmitted. Nothing leaves your browser.<br>
+  All sales are final. No refunds.<br>
+  &copy; 2026 Mitul Tailor &nbsp;&middot;&nbsp; <a href="https://mitultaylor.github.io/it-tools/" style="color:#9A7E5A">All Tools</a>
+</p>
+</div>
+<script>
+document.querySelectorAll('.option input[type="radio"]').forEach(r=>{r.addEventListener('change',function(){const n=this.name;document.querySelectorAll('input[name="'+n+'"]').forEach(x=>x.closest('.option').classList.remove('selected'));this.closest('.option').classList.add('selected')})});
+function calcPriority(){
+  const qs=['q1','q2','q3','q4','q5','q6'];const a={};let ok=true;
+  qs.forEach(q=>{const v=document.querySelector('input[name="'+q+'"]:checked');if(!v)ok=false;else a[q]=parseInt(v.value)});
+  const err=document.getElementById('errorMsg');
+  if(!ok){err.style.display='block';err.scrollIntoView({behavior:'smooth',block:'center'});return}
+  err.style.display='none';
+  const impact=a.q1+a.q2+(4-a.q3);
+  const urgency=a.q4+a.q5+a.q6;
+  const total=impact+urgency;
+  let priority,badge,text,slaTime,slaSub,findings=[];
+  if(total>=17){priority=1;badge='Priority 1 - Critical';text='Complete stoppage or VIP impact with immediate deadline risk. Assign now. Do not queue.';slaTime='15 min';slaSub='Response target | Resolve within 1 hour';findings=[{i:'⚠',t:'Assign to a senior engineer immediately.'},{i:'⚠',t:'Notify IT management and affected stakeholders now.'},{i:'⚠',t:'Open a bridge call if multiple teams are needed.'},{i:'⚠',t:'Update status every 15 minutes until resolved.'}]}
+  else if(total>=13){priority=2;badge='Priority 2 - High';text='Significant business impact, no workaround, high time pressure. Assign within 15 minutes.';slaTime='1 hour';slaSub='Response target | Resolve within 4 hours';findings=[{i:'⚠',t:'Assign within 15 minutes. Do not batch with the standard queue.'},{i:'⚠',t:'Confirm workaround options with the user.'},{i:'⚠',t:'Escalate to next tier if no progress within 30 minutes.'},{i:'⚠',t:'Update the user every 30 minutes.'}]}
+  else if(total>=8){priority=3;badge='Priority 3 - Medium';text='Moderate impact with a workaround available or enough time before escalation. Manage in queue but do not defer.';slaTime='4 hours';slaSub='Response target | Resolve within 8 hours';findings=[{i:'i',t:'Assign within 4 hours through standard queue management.'},{i:'i',t:'Confirm the workaround with the user and set a resolution expectation.'},{i:'i',t:'Monitor for scope expansion  -  reprioritise if more users are affected.'}]}
+  else{priority=4;badge='Priority 4 - Low';text='Minimal impact. User can continue working. Schedule resolution without disrupting higher-priority work.';slaTime='Next day';slaSub='Response target | Resolve within 3 business days';findings=[{i:'i',t:'Log and queue for scheduled resolution.'},{i:'i',t:'Confirm the workaround with the user and document it.'},{i:'i',t:'Group with similar low-priority items for efficient batch resolution.'}]}
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('auditForm').style.display='none';
+  const pb=document.getElementById('priorityBadge');
+  pb.textContent=badge;pb.className='priority-badge p'+priority;
+  document.getElementById('priorityText').textContent=text;
+  document.getElementById('slaTime').textContent=slaTime;
+  document.getElementById('slaSub').textContent=slaSub;
+  document.getElementById('findingsBlock').innerHTML='<div class="findings-title">What to do now</div>'+findings.map(f=>'<div class="fi"><span>'+f.i+'</span><span>'+f.t+'</span></div>').join('');
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function resetCalc(){document.getElementById('auditForm').style.display='block';document.getElementById('resultCard').style.display='none';document.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false;r.closest('.option').classList.remove('selected')});window.scrollTo({top:0,behavior:'smooth'})}
+</script>
+</body>
+</html>
