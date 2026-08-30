@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Leadership Salary Benchmarker  -  IT Operations Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F4EFE6;color:#4B3621;min-height:100vh;padding:0}
+.site-nav{background:#4B3621;padding:0 32px;height:48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F4EFE6;text-decoration:none}
+.nav-links{display:flex;gap:24px}
+.nav-links a{font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#D4B896;text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:#F4EFE6}
+.container{max-width:700px;margin:0 auto;padding:40px 20px 64px}
+.tool-header{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid #D4B896}
+.tool-header h1{font-size:1.5rem;font-weight:900;letter-spacing:-.5px;color:#4B3621;margin-bottom:8px;line-height:1.2}
+.tool-header p{font-size:.86rem;color:#6B4F2A;line-height:1.65}
+.card{background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:26px;margin-bottom:14px}
+.section-title{font-size:.62rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#8B6914;margin-bottom:18px;padding-bottom:9px;border-bottom:1px solid #D4B896}
+.question{margin-bottom:20px}
+.question label{display:block;font-size:.88rem;font-weight:700;color:#4B3621;margin-bottom:7px;line-height:1.5}
+.question .hint{font-size:.74rem;color:#6B4F2A;font-weight:400;margin-top:2px;display:block}
+.options{display:flex;flex-direction:column;gap:7px}
+.option{display:flex;align-items:center;gap:14px;padding:11px 16px;border:1.5px solid #D4B896;border-radius:6px;cursor:pointer;font-size:.83rem;color:#4B3621;line-height:1.45;transition:border-color .15s,background .15s}
+.option:hover{border-color:#8B6914;background:#EDE4D5}
+.option input[type="radio"]{width:16px;height:16px;flex-shrink:0;margin:0;accent-color:#8B6914;cursor:pointer}
+.option.selected{border-color:#4B3621;background:#EDE4D5;color:#4B3621;font-weight:700}
+.btn-run{display:block;width:100%;padding:14px;background:#4B3621;color:#F4EFE6;border:none;border-radius:6px;font-size:.88rem;font-weight:800;letter-spacing:.5px;cursor:pointer;margin-top:10px;transition:background .2s}
+.btn-run:hover{background:#3a2818}
+.btn-reset{display:block;width:100%;padding:12px;background:transparent;color:#4B3621;border:2px solid #4B3621;border-radius:6px;font-size:.86rem;font-weight:800;cursor:pointer;margin-top:8px;transition:all .2s}
+.btn-reset:hover{background:#4B3621;color:#F4EFE6}
+.error-msg{display:none;color:#7B1A1A;font-size:.8rem;margin-top:10px;padding:10px 14px;background:#F5E4E4;border-radius:6px;border-left:3px solid #9B2B2B}
+.result-card{display:none;background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:26px;margin-bottom:14px}
+.verdict-wrap{text-align:center;margin-bottom:26px}
+.verdict-badge{display:inline-block;padding:8px 24px;border-radius:4px;font-size:.76rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.v-proceed{background:#D4EDDA;color:#1A5C2A}
+.v-caution{background:#FFF3CD;color:#7B5800}
+.v-hold{background:#F8D7DA;color:#7B1A1A}
+.verdict-text{font-size:.86rem;color:#6B4F2A;line-height:1.6;max-width:500px;margin:0 auto}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+.score-lbl{font-size:.74rem;font-weight:700;color:#4B3621;width:160px;flex-shrink:0}
+.bar-t{flex:1;height:6px;background:#D4B896;border-radius:3px;overflow:hidden}
+.bar-f{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.score-pct{font-size:.74rem;font-weight:800;color:#4B3621;width:36px;text-align:right}
+.findings{margin-bottom:18px}
+.findings-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid #D4B896}
+.fi{display:flex;gap:10px;margin-bottom:9px;font-size:.82rem;line-height:1.5;color:#4B3621}
+.dims{margin-bottom:22px}
+.dims-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:13px}
+.priority-badge{display:inline-block;padding:10px 28px;border-radius:4px;font-size:1.15rem;font-weight:900;letter-spacing:-.3px;margin-bottom:10px}
+.p1{background:#F8D7DA;color:#7B1A1A}
+.p2{background:#FFF3CD;color:#7B5800}
+.p3{background:#D4EDDA;color:#1A5C2A}
+.p4{background:#E8E0D4;color:#4B3621}
+.sla-clock{background:#EDE4D5;border-radius:6px;padding:16px;margin-bottom:20px;text-align:center;border:1px solid #D4B896}
+.sla-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:6px}
+.sla-time{font-size:2rem;font-weight:900;color:#4B3621;letter-spacing:-1px;line-height:1}
+.sla-sub{font-size:.72rem;color:#6B4F2A;margin-top:4px}
+.mkt{margin-bottom:22px}
+.mkt-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:13px}
+.mkt-row{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:9px}
+.mkt-label{font-size:.76rem;font-weight:700;color:#4B3621}
+.mkt-range{font-size:.72rem;font-weight:800;color:#4B3621;text-align:right;white-space:nowrap}
+.insight{background:#EDE4D5;border-radius:6px;padding:16px;margin-bottom:16px;border:1px solid #D4B896}
+.insight-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:7px}
+.insight-text{font-size:.8rem;color:#4B3621;line-height:1.6}
+.footer-note{text-align:center;font-size:.7rem;color:#9A7E5A;margin-top:28px;line-height:1.7}
+.footer-note a{color:#9A7E5A}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="nav-brand" href="https://mitultaylor.github.io/it-tools/">IT Operations Tools</a>
+  <div class="nav-links"><a href="https://mitultaylor.github.io/it-tools/">All Tools</a></div>
+</nav>
+<div class="container">
+<div class="tool-header">
+  <h1>IT Leadership Salary Benchmarker</h1>
+  <p>Select your role, function, experience, sector, and certifications. Instant salary ranges across US, India, and Dubai. Based on 2026 market data for IT Operations leadership roles. No login. Nothing stored.</p>
+</div>
+<form id="form">
+
+<div class="card">
+<div class="section-title">Your Profile</div>
+
+<div class="question">
+<label>1. Role level<span class="hint">Select the level you are benchmarking.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q1" value="manager">IT Manager / Senior IT Manager</label>
+<label class="option"><input type="radio" name="q1" value="director">Director of IT Operations / Director IT</label>
+<label class="option"><input type="radio" name="q1" value="vp">VP of IT Operations / VP Technology</label>
+<label class="option"><input type="radio" name="q1" value="cio">CIO / Chief Information Officer</label>
+</div>
+</div>
+
+<div class="question">
+<label>2. Primary function<span class="hint">Select the function that best describes the role.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q2" value="ops">IT Operations and Service Delivery  -  ITSM, Service Desk, EUC</label>
+<label class="option"><input type="radio" name="q2" value="infra">Infrastructure and Cloud Engineering</label>
+<label class="option"><input type="radio" name="q2" value="security">Cybersecurity and Risk Management</label>
+<label class="option"><input type="radio" name="q2" value="mixed">Mixed mandate across multiple functions</label>
+</div>
+</div>
+
+<div class="question">
+<label>3. Years of relevant experience</label>
+<div class="options">
+<label class="option"><input type="radio" name="q3" value="junior">5 to 8 years</label>
+<label class="option"><input type="radio" name="q3" value="mid">9 to 12 years</label>
+<label class="option"><input type="radio" name="q3" value="senior">13 to 18 years</label>
+<label class="option"><input type="radio" name="q3" value="exec">19 years or more</label>
+</div>
+</div>
+
+<div class="question">
+<label>4. Sector<span class="hint">The employer's industry sector affects compensation significantly at leadership level.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q4" value="fs">Financial services, legal, or professional services</label>
+<label class="option"><input type="radio" name="q4" value="tech">Technology or SaaS</label>
+<label class="option"><input type="radio" name="q4" value="corp">Corporate enterprise or manufacturing</label>
+<label class="option"><input type="radio" name="q4" value="public">Public sector, education, or non-profit</label>
+</div>
+</div>
+
+<div class="question">
+<label>5. Certifications held<span class="hint">Select the highest relevant certification you currently hold.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q5" value="none">No active certifications</label>
+<label class="option"><input type="radio" name="q5" value="itil">ITIL Foundation or ServiceNow CSA</label>
+<label class="option"><input type="radio" name="q5" value="advanced">ITIL Managing Professional, CISM, CISSP, or equivalent advanced certification</label>
+<label class="option"><input type="radio" name="q5" value="ai">AI or emerging technology certification  -  Google AI Professional, SecAI+, or equivalent</label>
+</div>
+</div>
+</div>
+
+<div class="error-msg" id="errorMsg">Answer all 5 questions before benchmarking.</div>
+<button type="button" class="btn-run" onclick="benchmark()">Run Salary Benchmark</button>
+</form>
+
+<div class="result-card" id="resultCard">
+<div class="section-title">Salary Benchmark Results</div>
+<div class="mkt" id="mktBlock"></div>
+<div class="insight" id="insightBlock"></div>
+<button type="button" class="btn-reset" onclick="reset()">Run Another Benchmark</button>
+</div>
+
+<p class="footer-note">
+  Ranges are based on aggregated 2026 market data for IT Operations leadership roles. Results are indicative only and do not constitute financial or employment advice.<br>
+  Actual compensation varies by employer, location, negotiation, and total package structure.<br>
+  No data stored. Nothing leaves your browser. All sales final.<br>
+  &copy; 2026 Mitul Tailor &nbsp;&middot;&nbsp; <a href="https://mitultaylor.github.io/it-tools/">All Tools</a>
+</p>
+</div>
+<script>
+document.querySelectorAll('.option input').forEach(r=>{r.addEventListener('change',function(){const n=this.name;document.querySelectorAll('input[name="'+n+'"]').forEach(x=>x.closest('.option').classList.remove('selected'));this.closest('.option').classList.add('selected')})});
+const base={manager:{us:[110,160],india:[2200000,3500000],dubai:[18000,28000]},director:{us:[160,230],india:[3500000,6000000],dubai:[28000,45000]},vp:{us:[210,320],india:[6000000,10000000],dubai:[45000,75000]},cio:{us:[280,500],india:[10000000,20000000],dubai:[70000,130000]}};
+const mult={ops:1,infra:1.08,security:1.12,mixed:1.05,junior:0.88,mid:1,senior:1.12,exec:1.22,fs:1.1,tech:1.15,corp:1,public:0.82,none:1,itil:1.03,advanced:1.08,ai:1.06};
+function benchmark(){
+  const qs=['q1','q2','q3','q4','q5'];const a={};let ok=true;
+  qs.forEach(q=>{const v=document.querySelector('input[name="'+q+'"]:checked');if(!v)ok=false;else a[q]=v.value});
+  const err=document.getElementById('errorMsg');
+  if(!ok){err.style.display='block';err.scrollIntoView({behavior:'smooth',block:'center'});return}
+  err.style.display='none';
+  const m=mult[a.q2]*mult[a.q3]*mult[a.q4]*mult[a.q5];
+  const b=base[a.q1];
+  const us=[Math.round(b.us[0]*m),Math.round(b.us[1]*m)];
+  const india=[Math.round(b.india[0]*m/100000)*100000,Math.round(b.india[1]*m/100000)*100000];
+  const dubai=[Math.round(b.dubai[0]*m/1000)*1000,Math.round(b.dubai[1]*m/1000)*1000];
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('form').style.display='none';
+  const levels={manager:'IT Manager',director:'Director of IT Operations',vp:'VP IT Operations',cio:'CIO'};
+  const gc=v=>v<50?'#9B2B2B':v<75?'#8B6914':'#4a7c59';
+  document.getElementById('mktBlock').innerHTML=
+    '<div class="mkt-title">Salary ranges by market - '+levels[a.q1]+'</div>'+
+    [['United States','$'+us[0]+'K to $'+us[1]+'K',us[1]/500*100],['India (CTC)','₹'+(india[0]/100000).toFixed(0)+'L to ₹'+(india[1]/100000).toFixed(0)+'L',india[1]/2000000*100],['Dubai (AED/mo)','AED '+dubai[0].toLocaleString()+' to '+dubai[1].toLocaleString(),dubai[1]/130000*100]].map((d,i)=>
+      '<div class="mkt-row"><span class="mkt-label">'+d[0]+'</span><div class="bar-t"><div class="bar-f" id="mb'+i+'" style="width:0%;background:'+gc(d[2])+'"></div></div><span class="mkt-range">'+d[1]+'</span></div>'
+    ).join('');
+  setTimeout(()=>{[[0,us[1]/500*100],[1,india[1]/2000000*100],[2,dubai[1]/130000*100]].forEach(d=>document.getElementById('mb'+d[0]).style.width=Math.min(d[1],100)+'%')},100);
+  const insights=[];
+  if(a.q5==='none')insights.push('Adding ITIL v4 Foundation or ServiceNow CSA adds 3 to 5% to market rate at this level.');
+  if(a.q5==='itil')insights.push('An advanced certification  -  CISM, CISSP, or ITIL Managing Professional  -  adds 6 to 10% at this level.');
+  if(a.q5==='ai')insights.push('AI certifications carry a premium across all three markets in 2026. This credential is worth maintaining.');
+  if(a.q4==='public')insights.push('Public sector compensation is 15 to 22% below private sector at this level. The gap widens at VP and CIO.');
+  if(a.q4==='tech')insights.push('Technology sector pays a 12 to 18% premium over corporate enterprise, often with equity on top of base.');
+  if(a.q1==='vp'||a.q1==='cio')insights.push('At VP and CIO level, bonus and equity can add 30 to 50% above base. Negotiate total package, not just base salary.');
+  if(!insights.length)insights.push('Your profile sits in a well-documented compensation band. Use these ranges as a floor when negotiating, not a ceiling.');
+  document.getElementById('insightBlock').innerHTML='<div class="insight-title">Market insights</div><div class="insight-text">'+insights.map(i=>'<p style="margin-bottom:6px">'+i+'</p>').join('')+'</div>';
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function reset(){document.getElementById('form').style.display='block';document.getElementById('resultCard').style.display='none';document.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false;r.closest('.option').classList.remove('selected')});window.scrollTo({top:0,behavior:'smooth'})}
+</script>
+</body>
+</html>

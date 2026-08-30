@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ServiceNow ITSM Health Score  -  IT Operations Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F4EFE6;color:#4B3621;min-height:100vh;padding:0}
+.site-nav{background:#4B3621;padding:0 32px;height:48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#F4EFE6;text-decoration:none}
+.nav-links{display:flex;gap:24px}
+.nav-links a{font-size:.68rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#D4B896;text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:#F4EFE6}
+.container{max-width:700px;margin:0 auto;padding:40px 20px 64px}
+.tool-header{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid #D4B896}
+.tool-header h1{font-size:1.5rem;font-weight:900;letter-spacing:-.5px;color:#4B3621;margin-bottom:8px;line-height:1.2}
+.tool-header p{font-size:.86rem;color:#6B4F2A;line-height:1.65}
+.card{background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:26px;margin-bottom:14px}
+.section-title{font-size:.62rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#8B6914;margin-bottom:18px;padding-bottom:9px;border-bottom:1px solid #D4B896}
+.question{margin-bottom:20px}
+.question label{display:block;font-size:.88rem;font-weight:700;color:#4B3621;margin-bottom:7px;line-height:1.5}
+.question .hint{font-size:.74rem;color:#6B4F2A;font-weight:400;margin-top:2px;display:block}
+.options{display:flex;flex-direction:column;gap:7px}
+.option{display:flex;align-items:center;gap:14px;padding:11px 16px;border:1.5px solid #D4B896;border-radius:6px;cursor:pointer;font-size:.83rem;color:#4B3621;line-height:1.45;transition:border-color .15s,background .15s}
+.option:hover{border-color:#8B6914;background:#EDE4D5}
+.option input[type="radio"]{width:16px;height:16px;flex-shrink:0;margin:0;accent-color:#8B6914;cursor:pointer}
+.option.selected{border-color:#4B3621;background:#EDE4D5;color:#4B3621;font-weight:700}
+.btn-run{display:block;width:100%;padding:14px;background:#4B3621;color:#F4EFE6;border:none;border-radius:6px;font-size:.88rem;font-weight:800;letter-spacing:.5px;cursor:pointer;margin-top:10px;transition:background .2s}
+.btn-run:hover{background:#3a2818}
+.btn-reset{display:block;width:100%;padding:12px;background:transparent;color:#4B3621;border:2px solid #4B3621;border-radius:6px;font-size:.86rem;font-weight:800;cursor:pointer;margin-top:8px;transition:all .2s}
+.btn-reset:hover{background:#4B3621;color:#F4EFE6}
+.error-msg{display:none;color:#7B1A1A;font-size:.8rem;margin-top:10px;padding:10px 14px;background:#F5E4E4;border-radius:6px;border-left:3px solid #9B2B2B}
+.result-card{display:none;background:#FBF7F2;border:1px solid #D4B896;border-radius:6px;padding:26px;margin-bottom:14px}
+.verdict-wrap{text-align:center;margin-bottom:26px}
+.verdict-badge{display:inline-block;padding:8px 24px;border-radius:4px;font-size:.76rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px}
+.v-proceed{background:#D4EDDA;color:#1A5C2A}
+.v-caution{background:#FFF3CD;color:#7B5800}
+.v-hold{background:#F8D7DA;color:#7B1A1A}
+.verdict-text{font-size:.86rem;color:#6B4F2A;line-height:1.6;max-width:500px;margin:0 auto}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+.score-lbl{font-size:.74rem;font-weight:700;color:#4B3621;width:160px;flex-shrink:0}
+.bar-t{flex:1;height:6px;background:#D4B896;border-radius:3px;overflow:hidden}
+.bar-f{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.score-pct{font-size:.74rem;font-weight:800;color:#4B3621;width:36px;text-align:right}
+.findings{margin-bottom:18px}
+.findings-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:11px;padding-bottom:8px;border-bottom:1px solid #D4B896}
+.fi{display:flex;gap:10px;margin-bottom:9px;font-size:.82rem;line-height:1.5;color:#4B3621}
+.dims{margin-bottom:22px}
+.dims-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:13px}
+.priority-badge{display:inline-block;padding:10px 28px;border-radius:4px;font-size:1.15rem;font-weight:900;letter-spacing:-.3px;margin-bottom:10px}
+.p1{background:#F8D7DA;color:#7B1A1A}
+.p2{background:#FFF3CD;color:#7B5800}
+.p3{background:#D4EDDA;color:#1A5C2A}
+.p4{background:#E8E0D4;color:#4B3621}
+.sla-clock{background:#EDE4D5;border-radius:6px;padding:16px;margin-bottom:20px;text-align:center;border:1px solid #D4B896}
+.sla-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:6px}
+.sla-time{font-size:2rem;font-weight:900;color:#4B3621;letter-spacing:-1px;line-height:1}
+.sla-sub{font-size:.72rem;color:#6B4F2A;margin-top:4px}
+.mkt{margin-bottom:22px}
+.mkt-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:13px}
+.mkt-row{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;margin-bottom:9px}
+.mkt-label{font-size:.76rem;font-weight:700;color:#4B3621}
+.mkt-range{font-size:.72rem;font-weight:800;color:#4B3621;text-align:right;white-space:nowrap}
+.insight{background:#EDE4D5;border-radius:6px;padding:16px;margin-bottom:16px;border:1px solid #D4B896}
+.insight-title{font-size:.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:7px}
+.insight-text{font-size:.8rem;color:#4B3621;line-height:1.6}
+.footer-note{text-align:center;font-size:.7rem;color:#9A7E5A;margin-top:28px;line-height:1.7}
+.footer-note a{color:#9A7E5A}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="nav-brand" href="https://mitultaylor.github.io/it-tools/">IT Operations Tools</a>
+  <div class="nav-links"><a href="https://mitultaylor.github.io/it-tools/">All Tools</a></div>
+</nav>
+<div class="container">
+<div class="tool-header">
+  <h1>ServiceNow ITSM Health Score</h1>
+  <p>Score your ServiceNow instance across Process Maturity, Platform Governance, and Service Performance in under 5 minutes. 10 questions. Score out of 100. No login. Nothing stored.</p>
+</div>
+<form id="form">
+
+<div class="card">
+<div class="section-title">Process Maturity</div>
+<div class="question">
+<label>1. How does your team handle a recurring incident that has appeared three or more times?<span class="hint">Recurring incidents with no problem record are the clearest sign that the process is reactive rather than managed.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q1" value="10">A problem record is raised automatically. Root cause analysis is mandatory before the record closes.</label>
+<label class="option"><input type="radio" name="q1" value="6">Problem records are raised sometimes, depending on the engineer handling the incident.</label>
+<label class="option"><input type="radio" name="q1" value="2">Recurring incidents are resolved each time. No formal problem management process is in place.</label>
+</div>
+</div>
+
+<div class="question">
+<label>2. How are changes to production systems approved and implemented?<span class="hint">Change management quality is visible in outage post-mortems. If most outages trace back to unapproved or poorly tested changes, the process is not working.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q2" value="10">All changes go through a defined approval process. Emergency changes have a fast-track path with documented authorisation.</label>
+<label class="option"><input type="radio" name="q2" value="6">Most changes are approved. Emergency changes sometimes bypass the process without documentation.</label>
+<label class="option"><input type="radio" name="q2" value="2">Change management is informal. Engineers decide what needs approval based on their own judgement.</label>
+</div>
+</div>
+
+<div class="question">
+<label>3. What is your first-touch resolution rate for standard service requests?<span class="hint">First-touch resolution is the ratio of requests closed by the first person who handles them, without escalation or re-assignment.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q3" value="10">Over 70%  -  tracked and reported monthly.</label>
+<label class="option"><input type="radio" name="q3" value="6">Estimated at 50 to 70%  -  not formally tracked.</label>
+<label class="option"><input type="radio" name="q3" value="2">Unknown or below 50%.</label>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">Platform Governance</div>
+<div class="question">
+<label>4. How often is your ServiceNow instance upgraded to a supported version?<span class="hint">Running an unsupported version means no patches, no new features, and increasing technical debt.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q4" value="10">Upgraded within 6 months of each major release.</label>
+<label class="option"><input type="radio" name="q4" value="6">Upgrades happen but often lag 12 months or more behind the current release.</label>
+<label class="option"><input type="radio" name="q4" value="2">The instance has not been upgraded in over 2 years.</label>
+</div>
+</div>
+
+<div class="question">
+<label>5. Are ServiceNow customisations documented and reviewed before each upgrade?<span class="hint">Undocumented customisations break silently during upgrades. Finding them after the fact costs more than the upgrade itself.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q5" value="10">All customisations are documented. Pre-upgrade review is a defined step in the upgrade process.</label>
+<label class="option"><input type="radio" name="q5" value="5">Some documentation exists. Pre-upgrade review is informal.</label>
+<label class="option"><input type="radio" name="q5" value="1">Customisations are not consistently documented. Upgrade impact is discovered during or after the upgrade.</label>
+</div>
+</div>
+
+<div class="question">
+<label>6. Are user access rights in ServiceNow reviewed and updated on a defined schedule?<span class="hint">Access that is granted and never reviewed accumulates risk. Leavers, role changes, and project-based access should trigger immediate review.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q6" value="10">Access is reviewed at least annually. Offboarding triggers immediate removal.</label>
+<label class="option"><input type="radio" name="q6" value="5">Offboarding triggers removal but periodic reviews do not happen consistently.</label>
+<label class="option"><input type="radio" name="q6" value="1">No scheduled access review. Removal depends on someone noticing a leaver.</label>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="section-title">Service Performance</div>
+<div class="question">
+<label>7. Are SLA targets defined for each incident priority level, and are breaches reported to management?<span class="hint">An SLA that nobody reviews is a number in a database. The value comes from the conversation the breach triggers.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q7" value="10">SLAs are defined per priority. Breach reports go to management on a regular cadence.</label>
+<label class="option"><input type="radio" name="q7" value="5">SLAs are defined. Breach data is available but not reported regularly.</label>
+<label class="option"><input type="radio" name="q7" value="1">SLAs are not defined or are not enforced.</label>
+</div>
+</div>
+
+<div class="question">
+<label>8. Is incident volume trending down over a 6-month period?<span class="hint">A mature ITSM function closes problem records that prevent recurrence. Flat or rising incident volume usually means problems are being resolved, not fixed.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q8" value="10">Volume is trending down. The reduction is tracked against closed problem records.</label>
+<label class="option"><input type="radio" name="q8" value="5">Volume is roughly flat. No clear link between problem management and volume trend.</label>
+<label class="option"><input type="radio" name="q8" value="1">Volume is rising or not tracked.</label>
+</div>
+</div>
+
+<div class="question">
+<label>9. Are service review reports presented to senior stakeholders on a regular schedule?<span class="hint">Senior stakeholders who never see service data cannot make informed decisions about IT investment or service standards.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q9" value="10">Monthly or quarterly. Reports include SLA performance, incident trends, and problem closure rates.</label>
+<label class="option"><input type="radio" name="q9" value="5">Irregular. Reports are produced when asked for, not on a defined schedule.</label>
+<label class="option"><input type="radio" name="q9" value="1">Not produced.</label>
+</div>
+</div>
+
+<div class="question">
+<label>10. Is there a continuous improvement programme  -  a named list of improvements being tracked to completion?<span class="hint">Improvement that is discussed but not tracked rarely gets done. A named list with owners and target dates is the minimum for a functioning programme.</span></label>
+<div class="options">
+<label class="option"><input type="radio" name="q10" value="10">Yes. Improvements are logged, owned, and reviewed at service reviews.</label>
+<label class="option"><input type="radio" name="q10" value="5">Informal. Improvements are identified but not formally tracked.</label>
+<label class="option"><input type="radio" name="q10" value="1">No improvement programme.</label>
+</div>
+</div>
+</div>
+
+<div class="error-msg" id="errorMsg">Answer all 10 questions before scoring.</div>
+<button type="button" class="btn-run" onclick="score()">Score My ServiceNow Instance</button>
+</form>
+
+<div class="result-card" id="resultCard">
+<div class="section-title">Your ServiceNow Health Score</div>
+<div class="verdict-wrap">
+  <div class="verdict-badge" id="vbadge"></div>
+  <p class="verdict-text" id="vtext"></p>
+</div>
+<div class="dims"><div class="dims-title">Breakdown by area</div><div id="dimBars"></div></div>
+<div class="findings" id="findingsBlock"></div>
+<button type="button" class="btn-reset" onclick="reset()">Run Again</button>
+</div>
+
+<p class="footer-note">
+  Built on 12 years of ServiceNow ITSM operations. Results are indicative only.<br>
+  ITIL&reg; is a registered trade mark of AXELOS Limited. ServiceNow is a registered trademark of ServiceNow, Inc.<br>
+  No data stored. Nothing leaves your browser. All sales final.<br>
+  &copy; 2026 Mitul Tailor &nbsp;&middot;&nbsp; <a href="https://mitultaylor.github.io/it-tools/">All Tools</a>
+</p>
+</div>
+<script>
+document.querySelectorAll('.option input').forEach(r=>{r.addEventListener('change',function(){const n=this.name;document.querySelectorAll('input[name="'+n+'"]').forEach(x=>x.closest('.option').classList.remove('selected'));this.closest('.option').classList.add('selected')})});
+function score(){
+  const qs=['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10'];const a={};let ok=true;
+  qs.forEach(q=>{const v=document.querySelector('input[name="'+q+'"]:checked');if(!v)ok=false;else a[q]=parseInt(v.value)});
+  const err=document.getElementById('errorMsg');
+  if(!ok){err.style.display='block';err.scrollIntoView({behavior:'smooth',block:'center'});return}
+  err.style.display='none';
+  const pm=a.q1+a.q2+a.q3,pg=a.q4+a.q5+a.q6,sp=a.q7+a.q8+a.q9+a.q10;
+  const total=pm+pg+sp;
+  const pPM=Math.round(pm/30*100),pPG=Math.round(pg/30*100),pSP=Math.round(sp/40*100);
+  const overall=Math.round(total/100*100);
+  let badge,cls,txt,findings=[];
+  if(overall>=85){badge='Strong  -  '+overall+'/100';cls='v-proceed';txt='The platform is well-governed and the processes are working. The improvement programme is the key to staying here.'}
+  else if(overall>=65){badge='Functional  -  '+overall+'/100';cls='v-caution';txt='The instance is working but has gaps that will cost more to fix later than now. Address the findings below before the next platform review.'}
+  else if(overall>=45){badge='At risk  -  '+overall+'/100';cls='v-caution';txt='Process gaps and governance weaknesses are accumulating. The platform is not returning the value it should.'}
+  else{badge='Critical  -  '+overall+'/100';cls='v-hold';txt='The platform needs a recovery plan. Start with process and governance before touching the platform configuration.'}
+  document.getElementById('resultCard').style.display='block';
+  document.getElementById('form').style.display='none';
+  const vb=document.getElementById('vbadge');vb.textContent=badge;vb.className='verdict-badge '+cls;
+  document.getElementById('vtext').textContent=txt;
+  const gc=p=>p>=80?'#4a7c59':p>=60?'#8B6914':'#9B2B2B';
+  document.getElementById('dimBars').innerHTML=[['Process Maturity',pPM],['Platform Governance',pPG],['Service Performance',pSP]].map(d=>'<div class="score-row"><span class="score-lbl">'+d[0]+'</span><div class="bar-t"><div class="bar-f" id="bd_'+d[0].replace(/ /g,'_')+'" style="width:0%;background:'+gc(d[1])+'"></div></div><span class="score-pct">'+d[1]+'%</span></div>').join('');
+  setTimeout(()=>{[['Process_Maturity',pPM],['Platform_Governance',pPG],['Service_Performance',pSP]].forEach(d=>document.getElementById('bd_'+d[0]).style.width=d[1]+'%')},100);
+  if(a.q1<6)findings.push({i:'⚠',t:'Problem management is inconsistent. Recurring incidents that close without a problem record are the most expensive gap in a mature ITSM function.'});
+  if(a.q2<6)findings.push({i:'⚠',t:'Change management has gaps. Emergency changes without documented authorisation are an audit risk and a common source of outages.'});
+  if(a.q3<6)findings.push({i:'⚠',t:'First-touch resolution is low or not tracked. Measure it for 30 days. The number alone will identify where to focus.'});
+  if(a.q4<6)findings.push({i:'⚠',t:'The instance is running a version that may not receive patches. Build an upgrade plan and a test environment.'});
+  if(a.q5<5)findings.push({i:'⚠',t:'Undocumented customisations will cause problems at the next upgrade. Audit them now, not during the upgrade window.'});
+  if(a.q6<5)findings.push({i:'⚠',t:'Access review gaps create compliance risk. Schedule a quarterly review and ensure offboarding triggers immediate removal.'});
+  if(a.q7<5)findings.push({i:'⚠',t:'SLA reporting to management does not happen regularly. Without it, service standards drift without anyone noticing.'});
+  if(a.q8<5)findings.push({i:'⚠',t:'Incident volume is flat or rising. Check whether problem records are actually being closed with permanent fixes, not workarounds.'});
+  if(a.q9<5)findings.push({i:'⚠',t:'Service reviews are not on a regular schedule. Stakeholders who do not see data cannot make informed decisions about IT investment.'});
+  if(a.q10<5)findings.push({i:'⚠',t:'No formal improvement programme. Identify three improvements, assign an owner to each, and review at the next service review.'});
+  if(!findings.length)findings.push({i:'✓',t:'No critical gaps. Keep the improvement programme active and review the score in 6 months.'});
+  document.getElementById('findingsBlock').innerHTML='<div class="findings-title">What to fix first</div>'+findings.map(f=>'<div class="fi"><span>'+f.i+'</span><span>'+f.t+'</span></div>').join('');
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function reset(){document.getElementById('form').style.display='block';document.getElementById('resultCard').style.display='none';document.querySelectorAll('input[type="radio"]').forEach(r=>{r.checked=false;r.closest('.option').classList.remove('selected')});window.scrollTo({top:0,behavior:'smooth'})}
+</script>
+</body>
+</html>
