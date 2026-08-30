@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Operations Tools  -  Mitul Tailor</title>
+<meta name="description" content="Six browser tools built on 12 years of IT operations. $29 each. No login. Nothing stored.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#F4EFE6;color:#4B3621;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:50px;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(244,239,230,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid #D4B896;
+}
+.nav-brand{font-size:.65rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#4B3621;text-decoration:none}
+.nav-link{font-size:.62rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#8B6914;text-decoration:none}
+
+/* HERO */
+.hero{padding:100px 32px 60px;display:flex;flex-direction:column;align-items:center;text-align:center}
+
+.logo-mark{width:68px;height:68px;margin-bottom:16px;flex-shrink:0}
+
+.hero-eyebrow{
+  font-size:.6rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#8B6914;
+  margin-bottom:14px;display:flex;align-items:center;gap:10px;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:18px;height:1.5px;background:#8B6914}
+
+.hero h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;line-height:1.0;letter-spacing:-3px;color:#1A0E05;margin-bottom:16px}
+.hero h1 .accent{color:#8B6914}
+
+.hero-sub{font-size:.92rem;color:#6B4F2A;line-height:1.7;max-width:420px;margin-bottom:32px;font-weight:300}
+
+.hero-stats{
+  display:flex;gap:0;
+  border:1px solid #D4B896;border-radius:4px;
+  background:#FBF7F2;overflow:hidden;
+  margin-bottom:48px;
+}
+.stat-block{display:flex;flex-direction:column;align-items:center;gap:2px;padding:16px 24px;border-right:1px solid #D4B896}
+.stat-block:last-child{border-right:none}
+.stat-num{font-size:1.6rem;font-weight:900;letter-spacing:-1px;color:#4B3621;line-height:1}
+.stat-lbl{font-size:.54rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#9A7E5A}
+
+/* SECTION LABEL */
+.section-label{
+  font-size:.58rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#8B6914;
+  margin-bottom:20px;display:flex;align-items:center;gap:14px;padding:0 32px;
+}
+.section-label::before,.section-label::after{content:'';flex:1;height:1px;background:#D4B896}
+
+/* GRID  -  desktop */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  padding:0 32px;
+  margin-bottom:14px;
+}
+
+/* ── CARD ── */
+.card{
+  position:relative;
+  border-radius:6px;
+  overflow:hidden;
+  border:1px solid #D4B896;
+  cursor:pointer;
+  /* flip container */
+  perspective:1000px;
+  transition:box-shadow .3s,transform .3s;
+  /* height set via JS-friendly approach */
+  height:290px;
+}
+.card:hover{
+  box-shadow:0 20px 48px rgba(75,54,33,0.14),0 4px 12px rgba(75,54,33,0.07);
+}
+
+/* 3D flip inner  -  desktop hover + js tap class */
+.card-inner{
+  position:absolute;inset:0;
+  transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.16,1,.3,1);
+  border-radius:6px;
+}
+
+/* desktop: hover flips */
+@media(hover:hover) and (pointer:fine){
+  .card:hover .card-inner{transform:rotateY(180deg)}
+}
+
+/* js tap class  -  works on ALL devices */
+.card.flipped .card-inner{transform:rotateY(180deg)}
+
+/* FRONT & BACK */
+.card-front,.card-back{
+  position:absolute;inset:0;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  padding:24px;
+  display:flex;flex-direction:column;
+  border-radius:6px;
+}
+
+/* FRONT */
+.card-front{background:#FBF7F2;justify-content:space-between}
+.cf-num{font-size:4rem;font-weight:900;letter-spacing:-4px;color:#EDE4D5;line-height:1;margin-bottom:-6px}
+.cf-tag{font-size:.54rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#8B6914;margin-bottom:5px}
+.cf-name{font-size:1rem;font-weight:900;letter-spacing:-.35px;color:#1A0E05;margin-bottom:7px;line-height:1.2}
+.cf-desc{font-size:.73rem;color:#6B4F2A;line-height:1.5;font-weight:300}
+.cf-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid #D4B896}
+.cf-price{font-size:1.25rem;font-weight:900;letter-spacing:-.7px;color:#4B3621}
+.cf-hint{font-size:.56rem;color:#D4B896;display:flex;align-items:center;gap:3px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.cf-hint svg{width:11px;height:11px}
+
+/* BACK */
+.card-back{transform:rotateY(180deg);justify-content:space-between}
+.card[data-c="1"] .card-back{background:#4B3621}
+.card[data-c="2"] .card-back{background:#8B6914}
+.card[data-c="3"] .card-back{background:#1A0E05}
+.card[data-c="4"] .card-back{background:#6B4F2A}
+.card[data-c="5"] .card-back{background:#9A7E5A}
+.card[data-c="6"] .card-back{background:#7A6040}
+.cb-tag{font-size:.54rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(244,239,230,.5);margin-bottom:5px}
+.cb-name{font-size:.96rem;font-weight:900;letter-spacing:-.3px;color:#F4EFE6;margin-bottom:12px;line-height:1.2}
+.cb-feats{display:flex;flex-direction:column;gap:5px;flex:1}
+.cb-feats span{font-size:.69rem;color:rgba(244,239,230,.65);display:flex;align-items:flex-start;gap:6px;line-height:1.4}
+.cb-feats span::before{content:'';display:block;width:3px;height:3px;border-radius:50%;background:rgba(244,239,230,.35);flex-shrink:0;margin-top:5px}
+.cb-buy{display:flex;flex-direction:column;gap:7px;padding-top:12px;border-top:1px solid rgba(244,239,230,.12)}
+.cb-price{display:flex;align-items:baseline;gap:4px}
+.cb-price-big{font-size:1.6rem;font-weight:900;letter-spacing:-1px;color:#F4EFE6;line-height:1}
+.cb-price-sub{font-size:.6rem;color:rgba(244,239,230,.4)}
+.cb-btn{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  padding:11px;background:rgba(244,239,230,.14);border:1px solid rgba(244,239,230,.22);
+  border-radius:4px;font-size:.72rem;font-weight:800;letter-spacing:.3px;
+  color:#F4EFE6;text-decoration:none;transition:background .2s;
+}
+.cb-btn:hover,.cb-btn:active{background:rgba(244,239,230,.26)}
+.cb-note{font-size:.54rem;color:rgba(244,239,230,.28);text-align:center}
+
+/* ── MOBILE  -  below 640px ──────────────────────────────────
+   Disable flip entirely. Show static card with all info visible.
+   Buy button always visible. No interaction needed to purchase.
+─────────────────────────────────────────────────────────── */
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr;padding:0 16px;gap:12px}
+  .section-label{padding:0 16px}
+  nav{padding:0 16px}
+  .hero{padding:82px 16px 48px}
+  .hero-stats{flex-wrap:wrap;justify-content:center}
+  .stat-block{padding:12px 16px}
+
+  /* kill the 3d flip on mobile */
+  .card{height:auto;perspective:none;cursor:default}
+  .card-inner{position:static;transform:none !important;transform-style:flat}
+  .card-front{display:none !important}
+  .card-back{
+    position:static;
+    transform:none !important;
+    backface-visibility:visible;
+    -webkit-backface-visibility:visible;
+    padding:20px;
+    border-radius:5px;
+  }
+  /* make every card show its back (buy state) always on mobile */
+  .card[data-c="1"] .card-back,
+  .card[data-c="2"] .card-back,
+  .card[data-c="3"] .card-back,
+  .card[data-c="4"] .card-back,
+  .card[data-c="5"] .card-back,
+  .card[data-c="6"] .card-back{display:flex;flex-direction:column;border-radius:5px}
+  .cb-feats{margin-bottom:8px}
+  .cb-btn{padding:14px}
+}
+
+/* ── TABLET  -  641 to 900px ── */
+@media(min-width:641px) and (max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr);padding:0 24px;gap:12px}
+  .section-label{padding:0 24px}
+  nav{padding:0 24px}
+  .hero{padding:90px 24px 52px}
+  .card{height:280px}
+}
+
+/* WHY STRIP */
+.why-strip{
+  margin:28px 32px 0;padding:26px 32px;
+  background:#4B3621;border-radius:4px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+}
+.why-item{padding:0 22px;border-right:1px solid rgba(244,239,230,.1)}
+.why-item:first-child{padding-left:0}
+.why-item:last-child{border-right:none}
+.why-title{font-size:.68rem;font-weight:800;color:#F4EFE6;margin-bottom:3px}
+.why-body{font-size:.63rem;color:rgba(244,239,230,.44);line-height:1.55;font-weight:300}
+
+@media(max-width:640px){
+  .why-strip{grid-template-columns:repeat(2,1fr);margin:20px 16px 0;padding:20px}
+  .why-item{border-right:none;border-bottom:1px solid rgba(244,239,230,.1);padding:12px 0}
+  .why-item:nth-child(3),.why-item:last-child{border-bottom:none}
+}
+@media(min-width:641px) and (max-width:900px){
+  .why-strip{grid-template-columns:repeat(2,1fr);margin:20px 24px 0}
+  .why-item:nth-child(2){border-right:none}
+  .why-item:nth-child(3){border-right:1px solid rgba(244,239,230,.1)}
+}
+
+/* FOOTER */
+footer{
+  padding:16px 32px;margin-top:28px;
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid #D4B896;
+  font-size:.6rem;color:#9A7E5A;flex-wrap:wrap;gap:6px;
+}
+footer a{color:#9A7E5A;text-decoration:none}
+@media(max-width:640px){footer{flex-direction:column;text-align:center;padding:14px 16px}}
+
+/* SCROLL REVEAL */
+.fade-up{opacity:0;transform:translateY(16px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.fade-up.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="#">IT Operations Tools</a>
+  <a class="nav-link" href="https://linkedin.com/in/mitultailor" target="_blank">Mitul Tailor</a>
+</nav>
+
+<section class="hero">
+  <svg class="logo-mark" viewBox="0 0 72 72" role="img" aria-label="Mitul Tailor MT monogram">
+    <rect x="0" y="0" width="72" height="72" rx="8" fill="#4B3621"/>
+    <rect x="0" y="0" width="72" height="5" fill="#8B6914"/>
+    <rect x="12" y="5" width="7" height="56" rx="1.5" fill="white"/>
+    <rect x="53" y="5" width="7" height="56" rx="1.5" fill="white"/>
+    <polygon points="12,5 19,5 36,26 53,5 60,5 60,12 36,34 12,12" fill="white"/>
+    <rect x="34" y="5" width="4" height="56" rx="1.5" fill="#8B6914"/>
+  </svg>
+  <div class="hero-eyebrow">Built by a practitioner</div>
+  <h1>Score. Fix.<br><span class="accent">Track.</span></h1>
+  <p class="hero-sub">Six browser tools built on 12 years of IT operations. Answer questions, get results. No login. Nothing stored.</p>
+  <div class="hero-stats">
+    <div class="stat-block"><div class="stat-num">12</div><div class="stat-lbl">Years ITSM</div></div>
+    <div class="stat-block"><div class="stat-num">6</div><div class="stat-lbl">Tools</div></div>
+    <div class="stat-block"><div class="stat-num">$29</div><div class="stat-lbl">Each, once</div></div>
+    <div class="stat-block"><div class="stat-num">0</div><div class="stat-lbl">Data stored</div></div>
+  </div>
+</section>
+
+<div class="section-label"><span>ITSM and Platform Health</span></div>
+
+<div class="grid">
+
+  <div class="card fade-up" data-c="1" style="transition-delay:.00s">
+    <div class="card-inner">
+      <div class="card-front">
+        <div><div class="cf-num">01</div><div class="cf-tag">Audit Tool</div><div class="cf-name">CMDB Health Audit</div><div class="cf-desc">Score your CMDB across Completeness, Correctness, and Compliance before the next audit lands.</div></div>
+        <div class="cf-bottom"><div class="cf-price">$29</div><div class="cf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>Tap to buy</div></div>
+      </div>
+      <div class="card-back">
+        <div><div class="cb-tag">Audit Tool</div><div class="cb-name">CMDB Health Audit</div><div class="cb-feats"><span>10 questions across the three dimensions every audit checks</span><span>Instant score with dimension breakdown</span><span>Prioritised gap list with specific next actions</span></div></div>
+        <div class="cb-buy"><div class="cb-price"><span class="cb-price-big">$29</span><span class="cb-price-sub">one-time</span></div><a class="cb-btn" href="https://meetulista.gumroad.com/l/cmdb-audit-tool" target="_blank">Get CMDB Audit &#8594;</a><div class="cb-note">No refunds. Instant delivery.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up" data-c="2" style="transition-delay:.08s">
+    <div class="card-inner">
+      <div class="card-front">
+        <div><div class="cf-num">02</div><div class="cf-tag">Health Score</div><div class="cf-name">ServiceNow ITSM Health</div><div class="cf-desc">Score how your ServiceNow instance is actually running across Process Maturity, Governance, and Performance.</div></div>
+        <div class="cf-bottom"><div class="cf-price">$29</div><div class="cf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>Tap to buy</div></div>
+      </div>
+      <div class="card-back">
+        <div><div class="cb-tag">Health Score</div><div class="cb-name">ServiceNow ITSM Health</div><div class="cb-feats"><span>10 questions. Score out of 100. Dimension breakdown.</span><span>Covers incident process, change governance, SLA performance</span><span>Built on real operational use, not documentation</span></div></div>
+        <div class="cb-buy"><div class="cb-price"><span class="cb-price-big">$29</span><span class="cb-price-sub">one-time</span></div><a class="cb-btn" href="https://meetulista.gumroad.com/l/servicenow-itsm-health" target="_blank">Get ITSM Health &#8594;</a><div class="cb-note">No refunds. Instant delivery.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up" data-c="3" style="transition-delay:.16s">
+    <div class="card-inner">
+      <div class="card-front">
+        <div><div class="cf-num">03</div><div class="cf-tag">Change Management</div><div class="cf-name">Change Readiness Checker</div><div class="cf-desc">Proceed, caution, or hold verdict before the window opens. 8 questions. Under 5 minutes.</div></div>
+        <div class="cf-bottom"><div class="cf-price">$29</div><div class="cf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>Tap to buy</div></div>
+      </div>
+      <div class="card-back">
+        <div><div class="cb-tag">Change Management</div><div class="cb-name">Change Readiness Checker</div><div class="cb-feats"><span>8 questions across Definition, Technical Readiness, Governance</span><span>Proceed, caution, or hold recommendation</span><span>Specific gaps to close before implementation</span></div></div>
+        <div class="cb-buy"><div class="cb-price"><span class="cb-price-big">$29</span><span class="cb-price-sub">one-time</span></div><a class="cb-btn" href="https://meetulista.gumroad.com/l/it-change-readiness-checker" target="_blank">Get Change Checker &#8594;</a><div class="cb-note">No refunds. Instant delivery.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up" data-c="4" style="transition-delay:.24s">
+    <div class="card-inner">
+      <div class="card-front">
+        <div><div class="cf-num">04</div><div class="cf-tag">Incident Management</div><div class="cf-name">Incident Priority Calculator</div><div class="cf-desc">Correct ITIL priority in under 2 minutes. P1 to P4. SLA response target. Escalation steps.</div></div>
+        <div class="cf-bottom"><div class="cf-price">$29</div><div class="cf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>Tap to buy</div></div>
+      </div>
+      <div class="card-back">
+        <div><div class="cb-tag">Incident Management</div><div class="cb-name">Incident Priority Calculator</div><div class="cb-feats"><span>6 questions across impact and urgency</span><span>P1 to P4 result with SLA response target</span><span>Specific escalation steps for each priority level</span></div></div>
+        <div class="cb-buy"><div class="cb-price"><span class="cb-price-big">$29</span><span class="cb-price-sub">one-time</span></div><a class="cb-btn" href="https://meetulista.gumroad.com/l/it-incident-priority-calculator" target="_blank">Get Priority Calc &#8594;</a><div class="cb-note">No refunds. Instant delivery.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up" data-c="5" style="transition-delay:.32s">
+    <div class="card-inner">
+      <div class="card-front">
+        <div><div class="cf-num">05</div><div class="cf-tag">Job Search</div><div class="cf-name">IT Leadership Job Tracker</div><div class="cf-desc">Track every Director and VP IT application across US, India, and Dubai in one purpose-built tool.</div></div>
+        <div class="cf-bottom"><div class="cf-price">$29</div><div class="cf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>Tap to buy</div></div>
+      </div>
+      <div class="card-back">
+        <div><div class="cb-tag">Job Search</div><div class="cb-name">IT Leadership Job Tracker</div><div class="cb-feats"><span>Five-gate evaluation and ATS score per application</span><span>Email cadence tracker with overdue alerts. Three markets.</span><span>Export to CSV. Saves in browser. No login.</span></div></div>
+        <div class="cb-buy"><div class="cb-price"><span class="cb-price-big">$29</span><span class="cb-price-sub">one-time</span></div><a class="cb-btn" href="https://meetulista.gumroad.com/l/it-leadership-job-tracker" target="_blank">Get Job Tracker &#8594;</a><div class="cb-note">No refunds. Instant delivery.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up" data-c="6" style="transition-delay:.40s">
+    <div class="card-inner">
+      <div class="card-front">
+        <div><div class="cf-num">06</div><div class="cf-tag">Salary Benchmark</div><div class="cf-name">IT Salary Benchmarker</div><div class="cf-desc">Benchmark your IT leadership salary across US, India, and Dubai based on role, sector, experience, and certifications.</div></div>
+        <div class="cf-bottom"><div class="cf-price">$29</div><div class="cf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>Tap to buy</div></div>
+      </div>
+      <div class="card-back">
+        <div><div class="cb-tag">Salary Benchmark</div><div class="cb-name">IT Salary Benchmarker</div><div class="cb-feats"><span>5 inputs. Instant ranges for all three markets.</span><span>Covers Manager, Director, VP, and CIO levels</span><span>Certification and sector premium explained per profile</span></div></div>
+        <div class="cb-buy"><div class="cb-price"><span class="cb-price-big">$29</span><span class="cb-price-sub">one-time</span></div><a class="cb-btn" href="https://meetulista.gumroad.com/l/it-leadership-salary-benchmarker" target="_blank">Get Salary Tool &#8594;</a><div class="cb-note">No refunds. Instant delivery.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="why-strip">
+  <div class="why-item"><div class="why-title">Nothing leaves your browser</div><div class="why-body">No server. No database. Processed locally, gone when you close the tab.</div></div>
+  <div class="why-item"><div class="why-title">Results in 5 minutes</div><div class="why-body">Questions. Score. Findings. Not a survey that emails a PDF three days later.</div></div>
+  <div class="why-item"><div class="why-title">Built from operations</div><div class="why-body">Every question comes from 12 years of running ITSM, not from reading a framework.</div></div>
+  <div class="why-item"><div class="why-title">One-time purchase</div><div class="why-body">Pay once. No subscription. No renewal. No account required.</div></div>
+</div>
+
+<footer>
+  <span>IT Operations Tools &nbsp;&middot;&nbsp; Built by <a href="https://linkedin.com/in/mitultailor" target="_blank">Mitul Tailor</a> &nbsp;&middot;&nbsp; &copy; 2026</span>
+  <span>Self-assessment only. No data stored. All sales final. &nbsp;&middot;&nbsp; ITIL&reg; AXELOS Limited &nbsp;&middot;&nbsp; ServiceNow&reg; ServiceNow Inc.</span>
+</footer>
+
+<script>
+// SCROLL REVEAL
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.06});
+document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
+
+// TAP TO FLIP  -  touch devices
+// Only activate on non-hover devices (touch screens)
+// Hover devices use CSS hover  -  JS tap would conflict
+const isTouchOnly = window.matchMedia('(hover:none)').matches;
+const isNotMobile = window.innerWidth > 640;
+
+if(isTouchOnly && isNotMobile){
+  // Tablet: tap to flip, tap again to unflip
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click', e=>{
+      // If tapping the buy button let it through
+      if(e.target.closest('.cb-btn')) return;
+      card.classList.toggle('flipped');
+      // Unflip all other cards
+      document.querySelectorAll('.card').forEach(c=>{
+        if(c!==card) c.classList.remove('flipped');
+      });
+    });
+  });
+}
+// Mobile (<640px): CSS handles it  -  static back always visible, no JS needed
+</script>
+</body>
+</html>
